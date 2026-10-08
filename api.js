@@ -12,7 +12,7 @@ const API_URL = (() => {
   }
 
   // Em produção (Render) — vai ser trocada após o deploy
-  return "https://nervusiris-api.onrender.com/api";
+  return "https://nervusiris.onrender.com/api";
 })();
 
 // ... resto do arquivo (apiFetch, etc)
