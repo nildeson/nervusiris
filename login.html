@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — Nervus Iris</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="login.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-icone">👁️</div>
+      <h1>Nervus Iris</h1>
+      <p>Acesso restrito a profissionais</p>
+    </div>
+
+    <form id="formLogin">
+      <label>
+        Usuário
+        <input
+          type="text"
+          id="usuario"
+          required
+          autocomplete="username"
+          placeholder="ex: ana.souza"
+          autofocus
+        />
+      </label>
+
+      <label>
+        Senha
+        <input
+          type="password"
+          id="senha"
+          required
+          autocomplete="current-password"
+          placeholder="••••••••"
+        />
+      </label>
+
+      <div id="loginErro" class="login-erro"></div>
+
+      <button type="submit" id="btnEntrar" class="btn-primario btn-full">
+        Entrar
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <a href="agendar.html">← Voltar para o agendamento público</a>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

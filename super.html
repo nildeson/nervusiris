@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Super Admin — Nervus Iris</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="super.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+  <header>
+  <h1>👑 Super Admin</h1>
+  <p>Painel do dono — Nervus Iris</p>
+ 
+
+    <div class="header-user">
+      <span class="user-badge badge-super">
+        <span class="user-icone">👑</span>
+        <span id="nomeUsuario">—</span>
+        <span class="user-papel papel-super">SUPER</span>
+      </span>
+      <a href="index.html" class="btn-voltar">← Voltar à agenda</a>
+      <button id="btnLogout" class="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <main class="super-main">
+
+    <!-- ESTATÍSTICAS GLOBAIS -->
+    <div class="kpis">
+      <div class="kpi-card">
+        <div class="kpi-icone">🏢</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Empresas</div>
+          <div class="kpi-valor" id="kpiEmpresas">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">✅</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Ativas</div>
+          <div class="kpi-valor" id="kpiAtivas">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">👥</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Usuários</div>
+          <div class="kpi-valor" id="kpiUsuarios">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">📅</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Consultas</div>
+          <div class="kpi-valor" id="kpiConsultas">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">🩺</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Profissionais</div>
+          <div class="kpi-valor" id="kpiProfissionais">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <div class="super-acoes">
+      <button id="btnNovaEmpresa" class="btn-primario btn-acao">
+        ➕ Nova Empresa
+      </button>
+      <button id="btnRecarregar" class="btn-secundario btn-acao">
+        🔄 Recarregar
+      </button>
+    </div>
+
+    <!-- FORM NOVA EMPRESA (escondido por padrão) -->
+    <div id="formNovaEmpresa" class="card card-form escondido">
+      <h2>➕ Criar nova clínica</h2>
+      <p class="form-ajuda">
+        Cada clínica tem dados isolados. Crie aqui e o admin dela poderá
+        configurar profissionais, usuários e SMTP.
+      </p>
+
+      <form id="formEmpresa">
+        <div class="form-grid">
+          <label>
+            Nome da clínica *
+            <input type="text" id="empNome" required placeholder="Ex: Clínica Visão Clara" />
+          </label>
+
+          <label>
+            Slug (URL) *
+            <input
+              type="text"
+              id="empSlug"
+              required
+              placeholder="clinica-visao-clara"
+              pattern="^[a-z0-9\-]+$"
+              title="Apenas letras minúsculas, números e hífen"
+            />
+            <small>Será usado em <code>clinica-visao-clara.seudominio.com</code></small>
+          </label>
+
+          <label>
+            CNPJ
+            <input type="text" id="empCnpj" placeholder="00.000.000/0000-00" />
+          </label>
+
+          <label>
+            E-mail da clínica
+            <input type="email" id="empEmail" placeholder="contato@clinica.com" />
+          </label>
+
+          <label>
+            Telefone
+            <input type="tel" id="empTelefone" placeholder="(00) 0000-0000" />
+          </label>
+
+          <label>
+            WhatsApp
+            <input type="tel" id="empWhatsapp" placeholder="(00) 00000-0000" />
+          </label>
+        </div>
+
+        <h3 style="margin-top:24px;">👤 Admin inicial da clínica</h3>
+
+        <div class="form-grid">
+          <label>
+            Nome do admin *
+            <input type="text" id="admNome" required placeholder="Ex: Dra. Carla Mendes" />
+          </label>
+
+          <label>
+            Usuário (login) *
+            <input
+              type="text"
+              id="admUsuario"
+              required
+              placeholder="carla.mendes"
+              pattern="^[a-zA-Z0-9._\-]+$"
+              title="Somente letras, números, ponto, hífen e underline"
+            />
+          </label>
+
+          <label>
+            Senha *
+            <input
+              type="password"
+              id="admSenha"
+              required
+              minlength="6"
+              placeholder="Mínimo 6 caracteres"
+            />
+          </label>
+        </div>
+
+        <div id="empErro" class="form-erro"></div>
+
+        <div class="form-acoes">
+          <button type="button" id="btnCancelarEmpresa" class="btn-secundario">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primario">
+            ✅ Criar clínica
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- LISTA DE EMPRESAS -->
+    <div class="card card-wide">
+      <div class="card-header">
+        <h2>🏢 Clínicas cadastradas</h2>
+        <span id="totalEmpresas" class="badge-total">0</span>
+      </div>
+
+      <div id="listaEmpresas" class="lista-empresas">
+        <p class="vazio">Carregando...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="api.js"></script>
+  <script src="super.js"></script>
+</body>
+</html>

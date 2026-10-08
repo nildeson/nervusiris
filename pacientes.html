@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pacientes — Agenda Saúde</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pacientes.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+ <header>
+  <h1>👥 Pacientes</h1>
+  <p>Prontuários e histórico — Nervus Iris</p>
+ 
+    <div class="header-user">
+      <span class="user-badge">
+        <span class="user-icone">👤</span>
+        <span id="nomeUsuario">—</span>
+        <span class="user-papel" id="papelUsuario"></span>
+      </span>
+      <a href="index.html" class="btn-voltar">← Voltar à agenda</a>
+      <button id="btnLogout" class="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <main class="pacientes-main">
+
+    <!-- BARRA DE AÇÕES -->
+    <div class="pacientes-barra">
+      <input
+        type="text"
+        id="busca"
+        class="busca-pacientes"
+        placeholder="🔍 Buscar por nome, CPF ou telefone..."
+      />
+      <button id="btnNovoPaciente" class="btn-primario btn-novo">
+        ➕ Novo paciente
+      </button>
+    </div>
+
+    <!-- LISTA -->
+    <div id="listaPacientes" class="lista-pacientes">
+      <p class="vazio">Carregando...</p>
+    </div>
+
+  </main>
+
+  <!-- MODAL: NOVO/EDITAR PACIENTE -->
+  <div id="modalPaciente" class="modal-overlay escondido">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="tituloModalPaciente">👤 Novo paciente</h3>
+        <button type="button" class="modal-fechar" onclick="fecharModalPaciente()">✕</button>
+      </div>
+
+      <form id="formPaciente">
+        <input type="hidden" id="paciId" />
+
+        <label>
+          Nome completo *
+          <input type="text" id="paciNome" required placeholder="Ex: Maria da Silva" />
+        </label>
+
+        <div class="modal-row">
+          <label>
+            CPF
+            <input type="text" id="paciCpf" placeholder="000.000.000-00" />
+          </label>
+          <label>
+            Nascimento
+            <input type="date" id="paciNascimento" />
+          </label>
+        </div>
+
+        <div class="modal-row">
+          <label>
+            Telefone
+            <input type="tel" id="paciTelefone" placeholder="(00) 00000-0000" />
+          </label>
+          <label>
+            E-mail
+            <input type="email" id="paciEmail" placeholder="paciente@email.com" />
+          </label>
+        </div>
+
+        <label>
+          Endereço
+          <input type="text" id="paciEndereco" placeholder="Rua, número, complemento" />
+        </label>
+
+        <div class="modal-row">
+          <label>
+            Cidade
+            <input type="text" id="paciCidade" />
+          </label>
+          <label>
+            Estado
+            <input type="text" id="paciEstado" maxlength="2" placeholder="SP" />
+          </label>
+        </div>
+
+        <label>
+          Convênio
+          <input type="text" id="paciConvenio" placeholder="Ex: Unimed, Bradesco Saúde..." />
+        </label>
+
+        <label>
+          Observações
+          <textarea id="paciObservacoes" rows="2" placeholder="Alergias, condições pré-existentes..."></textarea>
+        </label>
+
+        <div id="paciErro" class="form-erro"></div>
+
+        <div class="modal-acoes">
+          <button type="button" onclick="fecharModalPaciente()" class="btn-secundario">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primario">
+            💾 Salvar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PRONTUÁRIO -->
+  <div id="modalProntuario" class="modal-overlay escondido">
+    <div class="modal modal-grande">
+      <div class="modal-header">
+        <h3 id="tituloProntuario">👤 Prontuário</h3>
+        <button type="button" class="modal-fechar" onclick="fecharProntuario()">✕</button>
+      </div>
+
+      <div id="conteudoProntuario">
+        <p class="vazio">Carregando...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA ANOTAÇÃO -->
+  <div id="modalAnotacao" class="modal-overlay escondido">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>📝 Nova anotação</h3>
+        <button type="button" class="modal-fechar" onclick="fecharModalAnotacao()">✕</button>
+      </div>
+
+      <form id="formAnotacao">
+        <input type="hidden" id="anotPacienteId" />
+        <input type="hidden" id="anotConsultaId" />
+
+        <label>
+          Título (opcional)
+          <input type="text" id="anotTitulo" placeholder="Ex: Anamnese inicial" />
+        </label>
+
+        <label>
+          Tipo
+          <select id="anotTipo">
+            <option value="anamnese">Anamnese</option>
+            <option value="evolucao">Evolução</option>
+            <option value="exame">Resultado de exame</option>
+            <option value="prescricao">Prescrição</option>
+            <option value="anotacao">Anotação geral</option>
+          </select>
+        </label>
+
+        <label>
+          Texto *
+          <textarea id="anotTexto" rows="6" required placeholder="Descreva a anotação clínica..."></textarea>
+        </label>
+
+        <div id="anotErro" class="form-erro"></div>
+
+        <div class="modal-acoes">
+          <button type="button" onclick="fecharModalAnotacao()" class="btn-secundario">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primario">
+            💾 Salvar anotação
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA RECEITA -->
+<div id="modalReceita" class="modal-overlay escondido">
+  <div class="modal modal-grande">
+    <div class="modal-header">
+      <h3>💊 Nova Receita</h3>
+      <button type="button" class="modal-fechar" onclick="fecharModalReceita()">✕</button>
+    </div>
+
+    <form id="formReceita">
+      <input type="hidden" id="recPacienteId" />
+      <input type="hidden" id="recReceitaId" />
+
+      <label>
+        Tipo
+        <select id="recTipo">
+          <option value="oculos">👓 Óculos</option>
+          <option value="lentes">👁️ Lentes de contato</option>
+        </select>
+      </label>
+
+      <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Direito (OD)</h4>
+      <div class="grade-receita">
+        <label>ESF Longe
+          <input type="number" step="0.25" id="odEsfLonge" placeholder="-2.50" />
+        </label>
+        <label>CIL Longe
+          <input type="number" step="0.25" id="odCilLonge" placeholder="-0.75" />
+        </label>
+        <label>EIXO
+          <input type="number" min="0" max="180" id="odEixoLonge" placeholder="90" />
+        </label>
+        <label>DP
+          <input type="number" step="0.5" id="odDp" placeholder="30" />
+        </label>
+      </div>
+
+      <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Esquerdo (OE)</h4>
+      <div class="grade-receita">
+        <label>ESF Longe
+          <input type="number" step="0.25" id="oeEsfLonge" placeholder="-2.75" />
+        </label>
+        <label>CIL Longe
+          <input type="number" step="0.25" id="oeCilLonge" placeholder="-0.50" />
+        </label>
+        <label>EIXO
+          <input type="number" min="0" max="180" id="oeEixoLonge" placeholder="85" />
+        </label>
+        <label>DP
+          <input type="number" step="0.5" id="oeDp" placeholder="31" />
+        </label>
+      </div>
+
+      <h4 style="color:#0369a1;margin:20px 0 12px;">📖 Adição (perto)</h4>
+      <div class="grade-receita">
+        <label>Adição
+          <input type="number" step="0.25" id="recAdicao" placeholder="2.00" />
+        </label>
+      </div>
+
+      <div class="preview-perto">
+        <p style="margin:0 0 8px 0;font-size:0.85rem;color:#0369a1;font-weight:600;">🔢 Cálculo automático do grau de perto:</p>
+        <div class="preview-graus">
+          <div>👁️ <strong>OD perto:</strong> <span id="previewOdPerto">—</span></div>
+          <div>👁️ <strong>OE perto:</strong> <span id="previewOePerto">—</span></div>
+        </div>
+      </div>
+
+      <label>
+        Observações
+        <textarea id="recObservacoes" rows="2" placeholder="Ex: Usar somente para leitura / longa distância..."></textarea>
+      </label>
+
+      <div id="recErro" class="form-erro"></div>
+
+      <div class="modal-acoes">
+        <button type="button" onclick="fecharModalReceita()" class="btn-secundario">Cancelar</button>
+        <button type="submit" class="btn-primario">💾 Salvar receita</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="mascaras.js"></script>
+  <script src="api.js"></script>
+  <script src="pacientes.js"></script>
+</body>
+</html>

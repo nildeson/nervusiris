@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerenciar — Nervus Iris</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="icon" href="data:,">
+</head>
+<body>
+
+  <header>
+ <header>
+  <h1>⚙️ Gerenciar</h1>
+  <p>Administre profissionais e usuários — Nervus Iris</p>
+ 
+
+    <div class="header-user">
+      <span class="user-badge">
+        <span class="user-icone">👤</span>
+        <span id="nomeUsuario">—</span>
+        <span class="user-papel">Admin</span>
+      </span>
+        <a href="super.html" id="linkSuper" class="btn-super" style="display:none;">
+         👑 Super Admin
+         </a>
+      <a href="index.html" class="btn-voltar">← Voltar à agenda</a>
+      <button id="btnLogout" class="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- ABAS -->
+    <div class="abas">
+       <button class="aba ativa" data-aba="profissionais">🩺 Profissionais</button>
+        <button class="aba" data-aba="usuarios">👥 Usuários</button>
+        <button class="aba" data-aba="config">⚙️ Configurações</button>
+       </div>
+ 
+    <!-- ============ ABA PROFISSIONAIS ============ -->
+    <section id="aba-profissionais" class="aba-conteudo ativa">
+      <div class="card">
+        <h2>➕ Novo profissional</h2>
+
+        
+
+        <form id="formNovoProfissional">
+          <label>
+            Nome completo *
+            <input type="text" id="profNome" required placeholder="Ex: Dra. Carla Mendes" />
+          </label>
+
+          <label>
+            Especialidade *
+            <select id="profEspecialidade" required>
+              <option value="">Selecione...</option>
+              <option value="Optometria">Optometria</option>
+              <option value="Oftalmologia">Oftalmologia</option>
+              <option value="Clínica Geral">Clínica Geral</option>
+              <option value="Odontologia">Odontologia</option>
+              <option value="Psicologia">Psicologia</option>
+            </select>
+          </label>
+
+          <div id="profErro" class="form-erro"></div>
+
+          <button type="submit" class="btn-primario">Criar profissional</button>
+        </form>
+      </div>
+
+      <div class="card card-wide">
+        <div class="card-header">
+          <h2>🩺 Profissionais cadastrados</h2>
+          <button id="btnRecarregarProf" class="btn-secundario">🔄 Recarregar</button>
+        </div>
+
+        
+
+        <div id="listaProfissionais" class="lista-usuarios">
+          <p class="vazio">Carregando...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABA USUÁRIOS ============ -->
+    <section id="aba-usuarios" class="aba-conteudo">
+      <div class="card">
+        <h2>➕ Novo usuário</h2>
+
+        <form id="formNovoUsuario">
+          <label>
+            Nome completo *
+            <input type="text" id="novoNome" required placeholder="Ex: Dra. Ana Souza" />
+          </label>
+
+          <label>
+            Usuário (login) *
+            <input
+              type="text"
+              id="novoUsuario"
+              required
+              placeholder="Ex: ana.souza"
+              pattern="^[a-zA-Z0-9._\-]+$"
+              title="Somente letras, números, ponto, hífen e underline"
+            />
+          </label>
+
+          <label>
+            Senha *
+            <input
+              type="password"
+              id="novaSenha"
+              required
+              minlength="6"
+              placeholder="Mínimo 6 caracteres"
+            />
+          </label>
+
+          <label>
+            Papel *
+            <select id="novoPapel" required>
+              <option value="profissional">Profissional</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </label>
+
+          <label id="labelProfissionalVinculo">
+            Vincular ao profissional
+            <select id="novoProfissionalId">
+              <option value="">Selecione...</option>
+            </select>
+          </label>
+
+          <div id="novoErro" class="form-erro"></div>
+
+          <button type="submit" class="btn-primario">Criar usuário</button>
+        </form>
+      </div>
+
+      <div class="card card-wide">
+        <div class="card-header">
+          <h2>👥 Usuários cadastrados</h2>
+          <button id="btnRecarregar" class="btn-secundario">🔄 Recarregar</button>
+        </div>
+
+        <div id="listaUsuarios" class="lista-usuarios">
+          <p class="vazio">Carregando...</p>
+        </div>
+      </div>
+    </section>
+    
+<!-- ============ ABA CONFIGURAÇÕES ============ -->
+<section id="aba-config" class="aba-conteudo">
+  <div class="card card-wide">
+    <h2>⚙️ Configurações da clínica</h2>
+    <p style="color:#64748b;font-size:0.85rem;margin-bottom:20px;">
+      Essas informações aparecem nos e-mails e no botão de WhatsApp do sistema.
+    </p>
+
+    <form id="formConfig">
+
+      <!-- CONTATO -->
+      <h3 style="color:#0369a1;margin:20px 0 12px;">📞 Contato</h3>
+
+      <label>
+        Nome da clínica
+        <input type="text" id="cfgNome" placeholder="Ex: Clínica Visão Clara" />
+      </label>
+
+      <label>
+        WhatsApp da clínica
+        <input type="tel" id="cfgWhatsapp" placeholder="(00) 00000-0000" />
+        <small style="display:block;color:#64748b;font-size:0.75rem;margin-top:4px;">
+          Esse número aparece no botão "💬 Falar no WhatsApp" do sistema.
+        </small>
+      </label>
+
+      <!-- LOGO -->
+<h3 style="color:#0369a1;margin:20px 0 12px;">🖼️ Logo da clínica</h3>
+
+<div class="logo-upload-area">
+  <div id="previewLogo" class="logo-preview">
+    <span class="logo-vazio">Sem logo</span>
+  </div>
+
+  <div class="logo-upload-info">
+    <p style="color:#64748b;font-size:0.85rem;margin-bottom:12px;">
+      Formatos aceitos: PNG, JPG, SVG ou WebP. Tamanho máximo: 2MB.
+      Recomendado: 512x512px, fundo transparente (PNG).
+    </p>
+
+    <input
+      type="file"
+      id="inputLogo"
+      accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/webp"
+      style="display:none;"
+    />
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" id="btnEscolherLogo" class="btn-secundario">
+        📤 Escolher logo
+      </button>
+      <button type="button" id="btnRemoverLogo" class="btn-secundario" style="display:none;">
+        🗑️ Remover logo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CORES -->
+<h3 style="color:#0369a1;margin:24px 0 12px;">🎨 Cores da marca</h3>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+  <label>
+    Cor primária
+    <input type="color" id="corPrimaria" value="#6b21a8" style="height:44px;cursor:pointer;" />
+  </label>
+  <label>
+    Cor secundária
+    <input type="color" id="corSecundaria" value="#1e40af" style="height:44px;cursor:pointer;" />
+  </label>
+</div>
+
+      <!-- SMTP -->
+      <h3 style="color:#0369a1;margin:28px 0 12px;">📧 Envio de e-mail (SMTP)</h3>
+      <p style="color:#64748b;font-size:0.85rem;margin-bottom:12px;">
+        Cada clínica pode usar o próprio e-mail. Se deixar vazio, o sistema usa o e-mail padrão.
+      </p>
+
+      <label>
+        Servidor SMTP
+        <input type="text" id="cfgSmtpHost" placeholder="smtp.gmail.com" />
+      </label>
+
+      <label>
+        Porta
+        <input type="number" id="cfgSmtpPort" placeholder="587" />
+      </label>
+
+      <label>
+        Usuário (e-mail completo)
+        <input type="email" id="cfgSmtpUser" placeholder="clinica@gmail.com" />
+      </label>
+
+      <label>
+        Senha de app
+        <input type="password" id="cfgSmtpPass" placeholder="Deixe em branco para não alterar" />
+        <small style="display:block;color:#64748b;font-size:0.75rem;margin-top:4px;">
+          A senha nunca é exibida por segurança. Preencha apenas para trocar.
+        </small>
+      </label>
+
+      <label>
+        Nome remetente
+        <input type="text" id="cfgSmtpFrom" placeholder="Clínica Visão Clara <clinica@gmail.com>" />
+      </label>
+
+      <div id="cfgErro" class="form-erro"></div>
+
+      <button type="submit" class="btn-primario" style="margin-top:20px;">
+        💾 Salvar configurações
+      </button>
+    </form>
+  </div>
+</section>
+
+  </main>
+  <script src="mascaras.js"></script>
+  <script src="api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

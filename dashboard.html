@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Nervus Iris</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>📊 Dashboard</h1>
+  <p>Visão geral — Nervus Iris</p>
+
+
+    <div class="header-user">
+      <span class="user-badge">
+        <span class="user-icone">👤</span>
+        <span id="nomeUsuario">—</span>
+        <span class="user-papel">Admin</span>
+      </span>
+      <a href="index.html" class="btn-voltar">← Voltar à agenda</a>
+      <button id="btnLogout" class="btn-sair">Sair</button>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+
+    <!-- FILTROS -->
+    <div class="dashboard-filtros">
+      <label>
+        Período
+        <select id="filtroPeriodo">
+          <option value="7">Últimos 7 dias</option>
+          <option value="30" selected>Últimos 30 dias</option>
+          <option value="90">Últimos 90 dias</option>
+          <option value="365">Último ano</option>
+        </select>
+      </label>
+
+        <div class="dashboard-acoes">
+           <button id="btnExportarCsv" class="btn-acao">📥 Exportar CSV</button>
+         <button id="btnImprimir" class="btn-acao">🖨️ Imprimir / PDF</button>
+        </div>
+
+      <label>
+        Profissional
+        <select id="filtroProfissional">
+          <option value="">Todos profissionais</option>
+        </select>
+      </label>
+
+      <button id="btnAtualizar" class="btn-atualizar">🔄 Atualizar</button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi-card">
+        <div class="kpi-icone">📅</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Hoje</div>
+          <div class="kpi-valor" id="kpiHoje">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">📆</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Esta semana</div>
+          <div class="kpi-valor" id="kpiSemana">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">🗓️</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Este mês</div>
+          <div class="kpi-valor" id="kpiMes">—</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icone">🌐</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Online</div>
+          <div class="kpi-valor" id="kpiOnline">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÁFICO 1: Consultas por dia -->
+    <div class="grafico-box">
+      <h2>📈 Consultas por dia</h2>
+      <canvas id="graficoDias"></canvas>
+    </div>
+
+    <!-- GRÁFICO 2 e 3: Lado a lado -->
+    <div class="graficos-grid">
+      <div class="grafico-box">
+        <h2>🩺 Por especialidade</h2>
+        <canvas id="graficoEspecialidade"></canvas>
+      </div>
+
+      <div class="grafico-box">
+        <h2>👨‍⚕️ Top profissionais</h2>
+        <canvas id="graficoProfissionais"></canvas>
+      </div>
+    </div>
+
+    <!-- GRÁFICO 4: Horários de pico -->
+    <div class="grafico-box">
+      <h2>🕐 Horários de pico</h2>
+      <canvas id="graficoHorarios"></canvas>
+    </div>
+    <!-- NOVOS CARDS -->
+<div class="kpis" style="margin-top:16px;">
+  <div class="kpi-card">
+    <div class="kpi-icone">📊</div>
+    <div class="kpi-info">
+      <div class="kpi-label">Taxa de cancelamento</div>
+      <div class="kpi-valor" id="kpiCancel">—</div>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-icone">📈</div>
+    <div class="kpi-info">
+      <div class="kpi-label">Mês atual vs anterior</div>
+      <div class="kpi-valor" id="kpiComparativo">—</div>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-icone">👥</div>
+    <div class="kpi-info">
+      <div class="kpi-label">Novos vs recorrentes</div>
+      <div class="kpi-valor" id="kpiNovosRecorrentes">—</div>
+    </div>
+  </div>
+</div>
+
+  </main>
+
+  <script src="api.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

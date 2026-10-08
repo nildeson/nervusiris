@@ -1,0 +1,275 @@
+/* ===== Super Admin ===== */
+.super-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Badge super no header */
+.badge-super {
+  background: #fef3c7 !important;
+  border-color: #fbbf24 !important;
+  color: #92400e !important;
+}
+
+.papel-super {
+  background: #f59e0b !important;
+  color: white !important;
+}
+
+/* KPIs — reutiliza o mesmo estilo do dashboard */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s;
+}
+
+.kpi-card:hover { transform: translateY(-2px); }
+
+.kpi-icone {
+  font-size: 1.6rem;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f9ff;
+  border-radius: 10px;
+}
+
+.kpi-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.kpi-valor {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+/* Ações */
+.super-acoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-acao {
+  width: auto;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/* Formulário */
+.card-form {
+  border: 2px solid #0ea5e9;
+  animation: slideDown 0.25s ease;
+}
+
+.form-ajuda {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.form-grid label {
+  margin-bottom: 0;
+}
+
+.form-grid small {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin-top: 4px;
+}
+
+.form-grid code {
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.form-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-acoes button {
+  width: auto;
+  padding: 10px 20px;
+}
+
+/* Lista de empresas */
+.lista-empresas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empresa-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #f8fafc;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 12px;
+  transition: background 0.15s;
+}
+
+.empresa-item:hover { background: #f0f9ff; }
+
+.empresa-item.bloqueada {
+  opacity: 0.65;
+  border-left-color: #ef4444;
+  background: #fef2f2;
+}
+
+.empresa-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.empresa-info strong {
+  display: block;
+  font-size: 1.05rem;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.empresa-info .slug {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.empresa-info .contadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.empresa-info .contadores span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tag-ativa {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10px;
+  background: #dcfce7;
+  color: #166534;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.tag-bloqueada {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-total {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 16px;
+  background: #0ea5e9;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.empresa-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.btn-bloquear {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: #fef3c7;
+  color: #92400e;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-bloquear:hover { background: #fde68a; }
+
+.btn-desbloquear {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.btn-desbloquear:hover { background: #bbf7d0; }
+
+.btn-ver {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-ver:hover { background: #bae6fd; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .empresa-item {
+    flex-direction: column;
+  }
+  .empresa-acoes {
+    flex-direction: row;
+    align-self: stretch;
+  }
+}

@@ -1,0 +1,27 @@
+# Dependências
+node_modules/
+*/node_modules/
+
+# Ambiente — NUNCA subir .env
+.env
+**/.env
+!.env.example
+
+# Banco de dados
+*.db
+*.db-shm
+*.db-wal
+
+# Uploads
+server/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/

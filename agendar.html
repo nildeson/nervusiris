@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Agendar Consulta — Nervus Iris</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="agendar.css" />
+</head>
+<body>
+
+  <header>
+  <h1>👁️ Nervus Iris</h1>
+  <p>Agende sua consulta em poucos passos</p>
+</header>
+  <main class="agendar-main">
+
+    <!-- BARRA DE PROGRESSO -->
+    <div class="progresso">
+      <div class="passo ativo" data-passo="1">
+        <span class="num">1</span>
+        <span class="label">Seus dados</span>
+      </div>
+      <div class="passo" data-passo="2">
+        <span class="num">2</span>
+        <span class="label">Triagem</span>
+      </div>
+      <div class="passo" data-passo="3">
+        <span class="num">3</span>
+        <span class="label">Horário</span>
+      </div>
+      <div class="passo" data-passo="4">
+        <span class="num">4</span>
+        <span class="label">Confirmação</span>
+      </div>
+    </div>
+
+    <!-- ETAPA 1 — DADOS PESSOAIS -->
+    <section class="card etapa ativa" id="etapa1">
+      <h2>Seus dados</h2>
+
+      <label>
+        Nome completo *
+        <input type="text" id="pNome" required placeholder="Ex: Maria da Silva" />
+      </label>
+
+      <label>
+        Telefone / WhatsApp *
+        <input type="tel" id="pTelefone" required placeholder="(00) 00000-0000" />
+      </label>
+
+      <label>
+        E-mail (opcional)
+        <input type="email" id="pEmail" placeholder="voce@email.com" />
+      </label>
+
+      <label>
+        Data de nascimento (opcional)
+        <input type="date" id="pNascimento" />
+      </label>
+
+      <label>
+        CPF (opcional)
+        <input type="text" id="pCpf" placeholder="000.000.000-00" />
+      </label>
+
+      <div class="etapa-acoes">
+        <button type="button" class="btn-primario" onclick="irParaEtapa(2)">
+          Próximo →
+        </button>
+      </div>
+    </section>
+
+    <!-- ETAPA 2 — TRIAGEM -->
+    <section class="card etapa" id="etapa2">
+      <h2>Triagem inicial</h2>
+
+      <label>
+        Qual o motivo principal da consulta? *
+        <select id="tMotivo" required>
+          <option value="">Selecione...</option>
+          <option value="Consulta de rotina">Consulta de rotina</option>
+          <option value="Dificuldade para enxergar">Dificuldade para enxergar</option>
+          <option value="Dor de cabeça frequente">Dor de cabeça frequente</option>
+          <option value="Olhos vermelhos / irritados">Olhos vermelhos / irritados</option>
+          <option value="Trocar grau dos óculos">Trocar grau dos óculos</option>
+          <option value="Retorno / acompanhamento">Retorno / acompanhamento</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </label>
+
+      <label>
+        Há quanto tempo sente isso?
+        <select id="tTempo">
+          <option value="">Selecione...</option>
+          <option value="Hoje">Hoje</option>
+          <option value="Alguns dias">Alguns dias</option>
+          <option value="Algumas semanas">Algumas semanas</option>
+          <option value="Mais de um mês">Mais de um mês</option>
+          <option value="Mais de um ano">Mais de um ano</option>
+        </select>
+      </label>
+
+      <label>
+        Nível de urgência
+        <select id="tUrgencia">
+          <option value="Baixa">Baixa — é só uma consulta de rotina</option>
+          <option value="Média" selected>Média — quero resolver nos próximos dias</option>
+          <option value="Alta">Alta — estou com incômodo forte</option>
+        </select>
+      </label>
+
+      <fieldset class="checkboxes">
+        <legend>Você tem ou já teve algo disso? (marque o que se aplica)</legend>
+
+        <label class="check">
+          <input type="checkbox" id="tDiabete" />
+          Diabetes
+        </label>
+        <label class="check">
+          <input type="checkbox" id="tHipertensao" />
+          Hipertensão (pressão alta)
+        </label>
+        <label class="check">
+          <input type="checkbox" id="tCirurgia" />
+          Cirurgia ocular anterior
+        </label>
+        <label class="check">
+          <input type="checkbox" id="tAlergia" />
+          Alergia a algum medicamento
+        </label>
+        <label class="check">
+          <input type="checkbox" id="tLentes" />
+          Usa lentes de contato
+        </label>
+        <label class="check">
+          <input type="checkbox" id="tOculos" />
+          Usa óculos atualmente
+        </label>
+      </fieldset>
+
+      <label>
+        Está tomando algum medicamento? Quais?
+        <textarea id="tMedicamentos" rows="2" placeholder="Ex: Losartana 50mg"></textarea>
+      </label>
+
+      <label>
+        Observações / mais detalhes
+        <textarea id="tObs" rows="3" placeholder="Conte mais sobre o que está sentindo..."></textarea>
+      </label>
+
+      <div class="etapa-acoes">
+        <button type="button" class="btn-secundario" onclick="irParaEtapa(1)">
+          ← Voltar
+        </button>
+        <button type="button" class="btn-primario" onclick="irParaEtapa(3)">
+          Próximo →
+        </button>
+      </div>
+    </section>
+
+   <!-- ETAPA 3 — ESCOLHA DE HORÁRIO -->
+<section class="card etapa" id="etapa3">
+  <h2>Escolha o horário</h2>
+
+  <label>
+    Especialidade *
+    <select id="aEspecialidade" required>
+      <option value="">Selecione...</option>
+      <option value="Optometria">Optometria</option>
+      <option value="Oftalmologia">Oftalmologia</option>
+      <option value="Clínica Geral">Clínica Geral</option>
+      <option value="Odontologia">Odontologia</option>
+      <option value="Psicologia">Psicologia</option>
+    </select>
+  </label>
+
+  <label>
+    Profissional *
+    <select id="aProfissional" required disabled>
+      <option value="">Escolha a especialidade primeiro</option>
+    </select>
+  </label>
+
+  <label>
+    Data *
+    <input type="date" id="aData" required />
+  </label>
+
+  <div id="slotsDisponiveis" class="slots"></div>
+
+  <!-- 🆕 TRIAGEM OFTALMOLÓGICA (aparece só se for visão) -->
+  <div id="triagemOftalmo" class="triagem-extra escondido">
+  <h3>👁️ Perguntas sobre sua visão</h3>
+  <p class="triagem-sub">
+    Essas informações ajudam o especialista a se preparar para sua consulta.
+  </p>
+
+  <fieldset class="checkboxes">
+    <legend>Marque o que se aplica a você:</legend>
+
+    <label class="check">
+      <input type="checkbox" id="oOculos" />
+      Uso óculos atualmente
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oLentes" />
+      Uso lentes de contato
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oUltimoExame" />
+      Fiz exame de vista há mais de 2 anos
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oFamiliar" />
+      Tenho familiar com glaucoma ou catarata
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oLuz" />
+      Sinto sensibilidade à luz
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oCoceira" />
+      Sinto coceira ou ardência nos olhos
+    </label>
+    <label class="check">
+      <input type="checkbox" id="oOlhoSeco" />
+      Sinto olho seco com frequência
+    </label>
+  </fieldset>
+
+  <label>
+    Onde você sente mais dificuldade?
+    <select id="oDificuldade">
+      <option value="">Selecione...</option>
+      <option value="Perto">Para enxergar de perto (ler, celular)</option>
+      <option value="Longe">Para enxergar de longe (dirigir, TV)</option>
+      <option value="Ambos">Nos dois</option>
+      <option value="Não sinto">Não sinto dificuldade</option>
+    </select>
+  </label>
+
+  <label>
+    Quantas horas por dia você fica em telas (celular, PC)?
+    <select id="oTelas">
+      <option value="">Selecione...</option>
+      <option value="Menos de 2 horas">Menos de 2 horas</option>
+      <option value="2 a 4 horas">2 a 4 horas</option>
+      <option value="4 a 8 horas">4 a 8 horas</option>
+      <option value="Mais de 8 horas">Mais de 8 horas</option>
+    </select>
+  </label>
+
+  <label>
+    Há quanto tempo usa óculos ou lentes?
+    <select id="oTempoOculos">
+      <option value="">Selecione...</option>
+      <option value="Não uso">Não uso</option>
+      <option value="Menos de 1 ano">Menos de 1 ano</option>
+      <option value="1 a 5 anos">1 a 5 anos</option>
+      <option value="Mais de 5 anos">Mais de 5 anos</option>
+    </select>
+  </label>
+</div>
+
+  
+<label class="lgpd-check">
+  <input type="checkbox" id="aceiteLgpd" required />
+  <span>
+    Autorizo o uso dos meus dados pessoais para fins de atendimento,
+    conforme a <strong>Lei Geral de Proteção de Dados (LGPD)</strong>.
+    Meus dados serão usados apenas para esta consulta e contato relacionado.
+  </span>
+</label>
+
+<!-- 🆕 TESTE DE ACUIDADE VISUAL -->
+<div class="acuidade-box">
+  <h3>👁️ Teste rápido de visão</h3>
+  <p class="acuidade-instrucoes">
+    📏 <strong>Afaste-se cerca de 3 metros da tela</strong> (ou o mais longe que conseguir).<br>
+    Use óculos ou lentes, se já usa. Clique na <strong>última linha que você consegue ler</strong>.
+  </p>
+
+  <p class="acuidade-aviso">
+  ℹ️ Este é um teste aproximado. A avaliação completa será feita pelo especialista.
+</p>
+
+  <div class="acuidade-tabela">
+    <button type="button" class="linha-acuidade" data-valor="20/200" style="font-size: 42px;">
+      E
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/100" style="font-size: 32px;">
+      F P
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/70" style="font-size: 24px;">
+      T O Z
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/50" style="font-size: 18px;">
+      L P E D
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/40" style="font-size: 14px;">
+      P E C F D
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/30" style="font-size: 11px;">
+      E D F C Z P
+    </button>
+    <button type="button" class="linha-acuidade" data-valor="20/20" style="font-size: 9px;">
+      F E L O P Z D
+    </button>
+  </div>
+
+  <div class="acuidade-resultado">
+    <p>
+      <strong>Resultado:</strong>
+      <span id="acuidadeSelecionada">— não informado —</span>
+    </p>
+    <button type="button" class="btn-limpar-acuidade" onclick="limparAcuidade()">
+      🔄 Refazer
+    </button>
+  </div>
+</div>
+
+<!-- Campo oculto para guardar o valor -->
+<input type="hidden" id="tAcuidade" value="" />
+
+  <div class="etapa-acoes">
+    <button type="button" class="btn-secundario" onclick="irParaEtapa(2)">
+      ← Voltar
+    </button>
+    <button type="button" class="btn-primario" onclick="confirmarAgendamento()">
+      Confirmar agendamento ✓
+    </button>
+  </div>
+</section>
+
+
+    <!-- ETAPA 4 — SUCESSO -->
+    <section class="card etapa" id="etapa4">
+      <div class="sucesso-box">
+        <div class="sucesso-icone">✅</div>
+        <h2>Consulta agendada!</h2>
+        <p id="resumoSucesso"></p>
+        <p class="aviso">
+          📱 Você receberá uma confirmação por WhatsApp ou telefone em breve.
+        </p>
+        <a href="index.html" class="btn-secundario">← Voltar ao início</a>
+      </div>
+    </section>
+
+  </main>
+<script src="mascaras.js"></script>
+<script src="api.js"></script>
+<script src="agendar.js"></script>
+</body>
+</html>

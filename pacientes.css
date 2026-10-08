@@ -1,0 +1,402 @@
+/* ===== Tela Pacientes ===== */
+.pacientes-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Barra de ações */
+.pacientes-barra {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.busca-pacientes {
+  flex: 1;
+  margin: 0;
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: border 0.15s;
+}
+
+.busca-pacientes:focus {
+  border-color: #0ea5e9;
+  outline: none;
+}
+
+.btn-novo {
+  width: auto;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Lista */
+.lista-pacientes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paciente-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #fff;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.paciente-item:hover {
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.15);
+  transform: translateY(-1px);
+}
+
+.paciente-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.paciente-info strong {
+  display: block;
+  font-size: 1.05rem;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.paciente-info .linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 2px;
+}
+
+.paciente-info .linha span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.paciente-acoes {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-ver-paciente {
+  width: auto;
+  padding: 8px 14px;
+  background: #0ea5e9;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-ver-paciente:hover { background: #0284c7; }
+
+.btn-edit-paciente {
+  width: auto;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-edit-paciente:hover { background: #e2e8f0; }
+
+/* Modal grande */
+.modal-grande {
+  max-width: 800px !important;
+}
+
+.modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 500px) {
+  .modal-row { grid-template-columns: 1fr; }
+}
+
+/* Prontuário */
+.prontuario-info {
+  background: #f0f9ff;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.prontuario-info div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #334155;
+}
+
+.prontuario-info strong { color: #0f172a; }
+
+.secao-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.secao-titulo h4 {
+  color: #0369a1;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.secao-titulo button {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background: #0ea5e9;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.secao-titulo button:hover { background: #0284c7; }
+
+/* Lista de consultas dentro do prontuário */
+.lista-consultas-pront {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.consulta-pront {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-left: 3px solid #22c55e;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.consulta-pront .cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.consulta-pront .cabecalho strong {
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.consulta-pront .cabecalho .data {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.consulta-pront .detalhes {
+  color: #475569;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+/* Lista de anotações */
+.lista-anotacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.anotacao-item {
+  padding: 12px 16px;
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 8px;
+  position: relative;
+}
+
+.anotacao-item .cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.anotacao-item .titulo {
+  font-weight: 700;
+  color: #78350f;
+  font-size: 0.9rem;
+}
+
+.anotacao-item .tipo {
+  display: inline-block;
+  padding: 1px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 10px;
+  background: #f59e0b;
+  color: white;
+  text-transform: uppercase;
+  margin-left: 6px;
+}
+
+.anotacao-item .texto {
+  color: #451a03;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.anotacao-item .rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #92400e;
+  opacity: 0.8;
+}
+
+.btn-remover-anotacao {
+  background: transparent;
+  color: #991b1b;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.btn-remover-anotacao:hover {
+  background: rgba(153, 27, 27, 0.1);
+}
+
+/* ===== Receitas ===== */
+.grade-receita {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .grade-receita { grid-template-columns: repeat(2, 1fr); }
+}
+
+.preview-perto {
+  background: #f0f9ff;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-left: 4px solid #0ea5e9;
+  margin: 16px 0;
+}
+
+.preview-graus {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.preview-graus span {
+  font-family: monospace;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+/* Lista de receitas no prontuário */
+.lista-receitas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.receita-item {
+  padding: 14px 18px;
+  background: #f0fdf4;
+  border-left: 4px solid #22c55e;
+  border-radius: 10px;
+}
+
+.receita-item .cabecalho {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.receita-item .cabecalho strong {
+  color: #166534;
+}
+
+.receita-item .graus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.85rem;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.receita-item .graus span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.receita-item .graus strong {
+  font-family: monospace;
+  color: #166534;
+}
+
+.receita-item .rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.acoes-receita button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  padding: 2px 6px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.acoes-receita button:hover {
+  background: rgba(34, 197, 94, 0.15);
+}

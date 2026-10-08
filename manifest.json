@@ -1,0 +1,26 @@
+{
+  "name": "Nervus Iris — Agenda de Consultas",
+  "short_name": "Nervus Iris",
+  "description": "Sistema de agendamento para clínicas de saúde",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f0f9ff",
+  "theme_color": "#6b21a8",
+  "lang": "pt-BR",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

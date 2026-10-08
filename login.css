@@ -1,0 +1,92 @@
+/* ===== Tela de Login ===== */
+.login-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0ea5e9, #0369a1);
+  padding: 20px;
+}
+
+.login-card {
+  background: #fff;
+  padding: 40px 32px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-icone {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.login-header h1 {
+  color: #0369a1;
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+/*.login-header p {
+  color: #64748b;
+  font-size: 0.9rem;
+}*/
+
+.login-header p {
+  color: #1e40af;      /* azul escuro para contraste */
+  font-weight: 500;    /* deixa o texto um pouco mais forte */
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.login-erro {
+  display: none;
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+  font-size: 0.85rem;
+}
+
+.login-erro.visivel { display: block; }
+
+.btn-full {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.btn-full:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-footer a {
+  color: #0ea5e9;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}

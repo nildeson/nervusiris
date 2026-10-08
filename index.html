@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nervus Iris — Agenda de Consultas</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0ea5e9" />
+<link rel="icon" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Agenda Saúde" />
+</head>
+<body>
+  <header>
+<h1 id="tituloApp">
+  <img id="logoHeader" src="" alt="" style="display:none;height:40px;vertical-align:middle;margin-right:8px;" />
+  <span id="nomeHeader">👁️ Nervus Iris</span>
+</h1>
+</header>
+       <div class="backup-actions">
+          <button type="button" id="btnExportar">📥 Exportar</button>
+          <button type="button" id="btnImportar">📤 Importar</button>
+          <input type="file" id="arquivoImport" accept=".json" hidden />
+        </div>
+            <div class="header-actions">
+             <a href="agendar.html" class="btn-link-publico" target="_blank">
+              🌐 Link público de agendamento
+      </a>
+</div>
+      <div class="header-user">
+  <span class="user-badge" id="badgeUsuario">
+    <span class="user-icone">👤</span>
+    <span id="nomeUsuario">—</span>
+    <span class="user-papel" id="papelUsuario"></span>
+  </span>
+  <a href="dashboard.html" id="linkDashboard" class="btn-dashboard" style="display:none;">
+  📊 Dashboard
+</a>
+  <a href="admin.html" id="linkAdmin" class="btn-admin" style="display:none;">
+  👥 Gerenciar profissionais
+</a>
+
+<a href="super.html" id="linkSuper" class="btn-super" style="display:none;">
+  👑 Super Admin
+</a>
+
+<a href="pacientes.html" id="linkPacientes" class="btn-pacientes">
+  👥 Pacientes
+</a>
+
+<a href="#" id="linkWhatsEmpresa" class="btn-whats-empresa" style="display:none;" target="_blank">
+  💬 Falar no WhatsApp
+</a>
+
+<span id="badgeTrial" class="badge-trial" style="display:none;"></span>
+
+  <button id="btnLogout" class="btn-sair">Sair</button>
+</div>
+  </header>
+
+  <main>
+    <!-- FORMULÁRIO -->
+    <section class="card">
+           <h2>Nova Consulta</h2>
+            <form id="formConsulta">
+
+                <label class="campo-paciente">
+  Buscar paciente cadastrado
+  <div class="autocomplete-wrapper">
+    <input
+      type="text"
+      id="buscaPaciente"
+      placeholder="🔍 Digite nome, CPF ou telefone..."
+      autocomplete="off"
+    />
+    <div id="sugestoesPaciente" class="sugestoes escondido"></div>
+  </div>
+  <small class="dica-paciente">
+    Ou preencha os dados abaixo para cadastrar um novo
+  </small>
+</label>
+
+  <label>
+    Nome do paciente
+    <input type="text" id="nome" required placeholder="Ex: João Silva" />
+  </label>
+
+  <label>
+    Telefone
+    <input type="tel" id="telefone" required placeholder="(00) 00000-0000" />
+  </label>
+
+    <label>
+            E-mail
+            <input type="email" id="email" placeholder="paciente@email.com" />
+          </label>
+  <label>
+    Especialidade
+    <select id="especialidade" required>
+      <option value="">Selecione...</option>
+      <option value="Optometria">Optometria</option>
+      <option value="Oftalmologia">Oftalmologia</option>
+      <option value="Clínica Geral">Clínica Geral</option>
+      <option value="Odontologia">Odontologia</option>
+      <option value="Psicologia">Psicologia</option>
+    </select>
+  </label>
+
+  <label>
+    Profissional
+    <select id="profissional" required>
+      <option value="">Selecione...</option>
+    </select>
+  </label>
+
+  <label>
+    Sala / Consultório
+    <select id="sala" required>
+      <option value="">Selecione...</option>
+    </select>
+  </label>
+
+  <label>
+    Data
+    <input type="date" id="data" required />
+  </label>
+
+  <label>
+    Horário
+    <input type="time" id="hora" required />
+  </label>
+
+  <label>
+    Observações
+    <textarea id="obs" rows="3" placeholder="Opcional..."></textarea>
+  </label>
+
+  <div id="erros"></div>
+  <button type="submit">Agendar Consulta</button>
+</form>
+    </section>
+
+    <!-- LISTA -->
+    <!-- VISUALIZAÇÃO -->
+<section class="card card-wide">
+  <div class="card-header">
+    <h2>Agenda</h2>
+    <div class="view-toggle">
+      <button type="button" id="btnLista" class="ativo">📋 Lista</button>
+      <button type="button" id="btnCalendario">🗓️ Calendário</button>
+    </div>
+  </div>
+
+  <!-- VISÃO LISTA -->
+  <div id="viewLista">
+    <div class="filtros">
+      <input type="text" id="busca" placeholder="🔍 Buscar por nome..." />
+      <select id="filtroEspecialidade">
+        <option value="">Todas especialidades</option>
+      </select>
+    </div>
+    <ul id="listaConsultas"></ul>
+    <p id="semConsultas" class="vazio">Nenhuma consulta agendada ainda.</p>
+  </div>
+
+  <!-- VISÃO CALENDÁRIO -->
+  <div id="viewCalendario" class="escondido">
+    <div class="cal-nav">
+      <button type="button" id="semanaAnterior">◀</button>
+      <span id="tituloSemana"></span>
+      <button type="button" id="semanaAtual">Hoje</button>
+      <button type="button" id="semanaProxima">▶</button>
+    </div>
+         <div class="cal-filtros">
+          <select id="calFiltroProf">
+            <option value="">👨‍⚕️ Todos profissionais</option>
+          </select>
+          <select id="calFiltroSala">
+            <option value="">🚪 Todas as salas</option>
+          </select>
+          <select id="calFiltroEsp">
+            <option value="">🩺 Todas especialidades</option>
+          </select>
+       </div>
+
+    <div class="cal-legenda">
+      <span><i class="dot ocupado"></i> Ocupado</span>
+      <span><i class="dot livre"></i> Livre</span>
+      <span><i class="dot hoje"></i> Hoje</span>
+    </div>
+    <div class="calendario-wrapper">
+      <div id="calendario" class="calendario"></div>
+    </div>
+  </div>
+</section>
+  </main>
+
+  <!-- ===== MODAL DE EDIÇÃO ===== -->
+<div id="modalEdicao" class="modal-overlay escondido">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ Editar Consulta</h3>
+      <button type="button" class="modal-fechar" id="modalFechar">✕</button>
+    </div>
+
+    <form id="formEdicao">
+      <input type="hidden" id="editId" />
+
+      <label>
+        Nome do paciente
+        <input type="text" id="editNome" required />
+      </label>
+
+      <label>
+        Telefone
+        <input type="tel" id="editTelefone" required />
+      </label>
+
+         <label>
+            E-mail
+            <input type="email" id="editEmail" placeholder="paciente@email.com" />
+        </label>
+
+
+      <label>
+        Especialidade
+        <select id="editEspecialidade" required>
+          <option value="Optometria">Optometria</option>
+          <option value="Oftalmologia">Oftalmologia</option>
+          <option value="Clínica Geral">Clínica Geral</option>
+          <option value="Odontologia">Odontologia</option>
+          <option value="Psicologia">Psicologia</option>
+        </select>
+      </label>
+
+       <label>
+  Duração (automática)
+  <input type="text" id="editDuracao" readonly style="background:#f1f5f9; cursor:not-allowed;" />
+</label>
+
+      <label>
+        Profissional
+        <select id="editProfissional" required></select>
+      </label>
+
+      <label>
+        Sala / Consultório
+        <select id="editSala" required></select>
+      </label>
+
+      <div class="modal-row">
+        <label>
+          Data
+          <input type="date" id="editData" required />
+        </label>
+        <label>
+          Horário
+          <input type="time" id="editHora" required />
+        </label>
+      </div>
+
+      <label>
+        Observações
+        <textarea id="editObs" rows="3"></textarea>
+      </label>
+      <div id="editTriagemBox" class="edit-triagem escondido">
+      <h4>📋 Triagem do paciente</h4>
+      <div id="editTriagemConteudo"></div>
+        </div>
+
+      <div id="editErros" class="edit-erros"></div>
+
+          <div class="modal-whats">
+               <button type="button" id="btnWhatsModal" class="btn-whats-grande">
+                 💬 Enviar WhatsApp de confirmação
+            </button>
+            </div>
+
+      <div class="modal-acoes">
+        <button type="button" id="btnCancelarConsulta" class="btn-perigo">
+          🗑️ Cancelar consulta
+        </button>
+        <div class="modal-acoes-direita">
+          <button type="button" id="btnFecharModal" class="btn-secundario">
+            Fechar
+          </button>
+          <button type="submit" class="btn-primario">
+            💾 Salvar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="mascaras.js"></script>
+ <script src="api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
