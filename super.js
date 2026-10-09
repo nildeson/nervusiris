@@ -19,6 +19,83 @@ if (_usuario.papel !== "super") {
 // ===== Estado =====
 let empresas = [];
 
+//===================================================================
+// ===================================================================
+// =================  EDITAR EMPRESA  ================================
+// ===================================================================
+
+const modalEditar = document.getElementById("modalEditarEmpresa");
+const formEditar = document.getElementById("formEditarEmpresa");
+const editEmpErroBox = document.getElementById("editEmpErro");
+
+function abrirModalEditar(id) {
+  const e = empresas.find(x => x.id === id);
+  if (!e) return;
+
+  document.getElementById("editEmpId").value = e.id;
+  document.getElementById("editEmpNome").value = e.nome || "";
+  document.getElementById("editEmpSlug").value = e.slug || "";
+  document.getElementById("editEmpCnpj").value = e.cnpj || "";
+  document.getElementById("editEmpEmail").value = e.email || "";
+  document.getElementById("editEmpTelefone").value = e.telefone || "";
+  document.getElementById("editEmpWhatsapp").value = e.whatsapp || "";
+
+  editEmpErroBox.innerHTML = "";
+  editEmpErroBox.classList.remove("visivel");
+
+  modalEditar.classList.remove("escondido");
+  document.getElementById("editEmpNome").focus();
+}
+
+function fecharModalEditar() {
+  modalEditar.classList.add("escondido");
+  formEditar.reset();
+  editEmpErroBox.innerHTML = "";
+  editEmpErroBox.classList.remove("visivel");
+}
+
+formEditar.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  editEmpErroBox.innerHTML = "";
+  editEmpErroBox.classList.remove("visivel");
+
+  const id = Number(document.getElementById("editEmpId").value);
+  const dados = {
+    nome: document.getElementById("editEmpNome").value.trim(),
+    slug: document.getElementById("editEmpSlug").value.trim().toLowerCase(),
+    cnpj: document.getElementById("editEmpCnpj").value.trim(),
+    email: document.getElementById("editEmpEmail").value.trim(),
+    telefone: document.getElementById("editEmpTelefone").value.trim(),
+    whatsapp: document.getElementById("editEmpWhatsapp").value.trim()
+  };
+
+  if (!dados.nome || !dados.slug) {
+    editEmpErroBox.innerHTML = "<p>Nome e slug são obrigatórios</p>";
+    editEmpErroBox.classList.add("visivel");
+    return;
+  }
+
+  try {
+    await API.atualizarEmpresaSuper(id, dados);
+    fecharModalEditar();
+    await carregarTudo();
+  } catch (err) {
+    editEmpErroBox.innerHTML = `<p>❌ ${err.message}</p>`;
+    editEmpErroBox.classList.add("visivel");
+  }
+});
+
+// Fecha ao clicar fora do modal
+modalEditar.addEventListener("click", (e) => {
+  if (e.target === modalEditar) fecharModalEditar();
+});
+
+// Fecha com ESC
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modalEditar.classList.contains("escondido")) {
+    fecharModalEditar();
+  }
+});
 // ===================================================================
 // =========================  CARREGAR  ==============================
 // ===================================================================
@@ -77,12 +154,15 @@ async function carregarEmpresas() {
             <span>📅 ${e.totalConsultas} consultas</span>
           </div>
         </div>
-        <div class="empresa-acoes">
-          <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
-                  onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
-            ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
-          </button>
-        </div>
+            <div class="empresa-acoes">
+      <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
+        ✏️ Editar
+      </button>
+      <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
+              onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
+        ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
+      </button>
+    </div>
       `;
       listaEl.appendChild(div);
     });

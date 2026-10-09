@@ -234,4 +234,65 @@ router.delete("/empresas/:id", async (req, res) => {
   }
 });
 
+// ===================================================================
+// =====  PUT /api/super/empresas/:id  ===============================
+// =====  Atualiza dados da empresa (só super admin)  ================
+// ===================================================================
+router.put("/empresas/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, slug, cnpj, email, telefone, whatsapp } = req.body;
+
+    // Verifica se existe
+    const existente = await get("SELECT id, slug FROM empresas WHERE id = ?", [id]);
+    if (!existente) {
+      return res.status(404).json({ erro: "Empresa não encontrada" });
+    }
+
+    // Se mudou o slug, verifica se já não existe outro com mesmo slug
+    if (slug && slug !== existente.slug) {
+      const duplicado = await get(
+        "SELECT id FROM empresas WHERE slug = ? AND id != ?",
+        [slug, id]
+      );
+      if (duplicado) {
+        return res.status(400).json({ erro: "Já existe uma empresa com esse slug" });
+      }
+    }
+
+    // Monta UPDATE dinâmico
+    const campos = [];
+    const valores = [];
+
+    if (nome !== undefined)     { campos.push("nome = ?");     valores.push(nome); }
+    if (slug !== undefined)     { campos.push("slug = ?");     valores.push(slug); }
+    if (cnpj !== undefined)     { campos.push("cnpj = ?");     valores.push(cnpj || null); }
+    if (email !== undefined)    { campos.push("email = ?");    valores.push(email || null); }
+    if (telefone !== undefined) { campos.push("telefone = ?"); valores.push(telefone || null); }
+    if (whatsapp !== undefined) { campos.push("whatsapp = ?"); valores.push(whatsapp || null); }
+
+    if (campos.length === 0) {
+      return res.status(400).json({ erro: "Nada para atualizar" });
+    }
+
+    valores.push(id);
+
+    await run(
+      `UPDATE empresas SET ${campos.join(", ")} WHERE id = ?`,
+      valores
+    );
+
+    const atualizada = await get(
+      `SELECT id, nome, slug, cnpj, email, telefone, whatsapp, ativo, criadoEm
+       FROM empresas WHERE id = ?`,
+      [id]
+    );
+
+    res.json(atualizada);
+  } catch (err) {
+    console.error("💥", err);
+    res.status(500).json({ erro: "Erro ao atualizar empresa" });
+  }
+});
+
 module.exports = router;

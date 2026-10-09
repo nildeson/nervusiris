@@ -126,6 +126,11 @@ const API = {
       method: "PATCH",
       body: JSON.stringify({ ativo })
     }),
+      atualizarEmpresaSuper: (id, dados) =>
+    apiFetch(`/super/empresas/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(dados)
+    }),
 
   // ===== Pacientes =====
   listarPacientes: (busca = "") =>

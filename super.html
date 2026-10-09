@@ -186,7 +186,68 @@
       <div id="listaEmpresas" class="lista-empresas">
         <p class="vazio">Carregando...</p>
       </div>
+    </div>   
+
+    <!-- ============ MODAL: EDITAR EMPRESA ============ -->
+<div id="modalEditarEmpresa" class="modal-overlay escondido">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ Editar Empresa</h3>
+      <button type="button" class="modal-fechar" onclick="fecharModalEditar()">✕</button>
     </div>
+
+    <form id="formEditarEmpresa">
+      <input type="hidden" id="editEmpId" />
+
+      <label>
+        Nome da clínica *
+        <input type="text" id="editEmpNome" required />
+      </label>
+
+      <label>
+        Slug (URL) *
+        <input
+          type="text"
+          id="editEmpSlug"
+          required
+          pattern="^[a-z0-9\-]+$"
+          title="Apenas letras minúsculas, números e hífen"
+        />
+      </label>
+
+      <label>
+        CNPJ
+        <input type="text" id="editEmpCnpj" />
+      </label>
+
+      <label>
+        E-mail da clínica
+        <input type="email" id="editEmpEmail" />
+      </label>
+
+      <label>
+        Telefone
+        <input type="tel" id="editEmpTelefone" />
+      </label>
+
+      <label>
+        WhatsApp
+        <input type="tel" id="editEmpWhatsapp" />
+      </label>
+
+      <div id="editEmpErro" class="form-erro"></div>
+
+      <div class="modal-acoes">
+        <button type="button" onclick="fecharModalEditar()" class="btn-secundario">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primario">
+          💾 Salvar alterações
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
   </main>
 
