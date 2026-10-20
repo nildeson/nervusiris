@@ -155,14 +155,14 @@ async function carregarEmpresas() {
           </div>
         </div>
             <div class="empresa-acoes">
-      <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
-        ✏️ Editar
-      </button>
-      <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
-              onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
-        ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
-      </button>
-    </div>
+        <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
+          ✏️ Editar
+        </button>
+        <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
+                onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
+          ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
+        </button>
+        </div>
       `;
       listaEl.appendChild(div);
     });
@@ -284,5 +284,10 @@ document.getElementById("btnRecarregar").addEventListener("click", carregarTudo)
 // ===================================================================
 
 document.getElementById("nomeUsuario").textContent = _usuario.nome || "—";
+
+
+// ===================================================================
+// =================  EDITAR EMPRESA  ================================
+// ===================================================================
 
 carregarTudo();

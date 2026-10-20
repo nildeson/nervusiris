@@ -268,7 +268,9 @@ await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
 }
 
 
-
+// ===== Migrações: Recuperação de Senha =====
+await adicionarColunaSeFaltar("usuarios", "resetToken", "TEXT");
+await adicionarColunaSeFaltar("usuarios", "resetTokenExpira", "TEXT");
 // ===========================  EXPORT  ==============================
 // ===================================================================
 

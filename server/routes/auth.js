@@ -176,4 +176,89 @@ router.delete("/usuarios/:id", autenticar, exigirAdmin, async (req, res) => {
   }
 });
 
+const crypto = require("crypto");
+const { enviarEmailRecuperacao } = require("../mailer");
+
+// ===================================================================
+// =====  POST /api/auth/forgot-password  ============================
+// =====  Solicita a recuperação (envia o e-mail)  ===================
+// ===================================================================
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) return res.status(400).json({ erro: "E-mail obrigatório" });
+
+    const u = await get("SELECT id, nome FROM usuarios WHERE email = ?", [email]);
+
+    if (u) {
+      // Gera um token único de 32 caracteres
+      const token = crypto.randomBytes(32).toString('hex');
+      
+      // Validade de 1 hora
+      const expira = new Date();
+      expira.setHours(expira.getHours() + 1);
+
+      // Salva no banco
+      await run(
+        "UPDATE usuarios SET resetToken = ?, resetTokenExpira = ? WHERE id = ?",
+        [token, expira.toISOString(), u.id]
+      );
+
+      // Envia o e-mail
+      await enviarEmailRecuperacao(email, u.nome, token);
+    }
+
+    // Por segurança, sempre retornamos sucesso, mesmo se o e-mail não existir
+    res.json({ ok: true, mensagem: "Se o e-mail estiver cadastrado, enviaremos as instruções." });
+  } catch (err) {
+    console.error("💥", err);
+    res.status(500).json({ erro: "Erro ao processar solicitação" });
+  }
+});
+
+// ===================================================================
+// =====  POST /api/auth/reset-password  =============================
+// =====  Efetiva a nova senha usando o token  =======================
+// ===================================================================
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, token, novaSenha } = req.body;
+
+    if (!email || !token || !novaSenha) {
+      return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    if (novaSenha.length < 6) {
+      return res.status(400).json({ erro: "A senha deve ter no mínimo 6 caracteres" });
+    }
+
+    // Busca o usuário e verifica o token
+    const u = await get("SELECT id, resetToken, resetTokenExpira FROM usuarios WHERE email = ? AND resetToken = ?", [email, token]);
+
+    if (!u) {
+      return res.status(400).json({ erro: "Link inválido ou já utilizado." });
+    }
+
+    // Verifica se o token expirou
+    if (new Date(u.resetTokenExpira) < new Date()) {
+      return res.status(400).json({ erro: "O link expirou. Solicite novamente." });
+    }
+
+    // Criptografa a nova senha
+    const hash = await bcrypt.hash(novaSenha, 10);
+
+    // Atualiza a senha e limpa o token
+    await run(
+      "UPDATE usuarios SET senha = ?, resetToken = NULL, resetTokenExpira = NULL WHERE id = ?",
+      [hash, u.id]
+    );
+
+    res.json({ ok: true, mensagem: "Senha alterada com sucesso!" });
+  } catch (err) {
+    console.error("💥", err);
+    res.status(500).json({ erro: "Erro ao redefinir senha" });
+  }
+});
+
 module.exports = router;

@@ -132,6 +132,12 @@ const API = {
       body: JSON.stringify(dados)
     }),
 
+    atualizarEmpresaSuper: (id, dados) =>
+  apiFetch(`/super/empresas/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(dados)
+  }),
+
   // ===== Pacientes =====
   listarPacientes: (busca = "") =>
     apiFetch("/pacientes" + (busca ? `?q=${encodeURIComponent(busca)}` : "")),

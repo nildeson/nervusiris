@@ -188,7 +188,7 @@
       </div>
     </div>   
 
-    <!-- ============ MODAL: EDITAR EMPRESA ============ -->
+    <!-- MODAL: EDITAR EMPRESA -->
 <div id="modalEditarEmpresa" class="modal-overlay escondido">
   <div class="modal">
     <div class="modal-header">
@@ -206,13 +206,9 @@
 
       <label>
         Slug (URL) *
-        <input
-          type="text"
-          id="editEmpSlug"
-          required
-          pattern="^[a-z0-9\-]+$"
-          title="Apenas letras minúsculas, números e hífen"
-        />
+        <input type="text" id="editEmpSlug" required
+               pattern="^[a-z0-9\-]+$"
+               title="Apenas letras minúsculas, números e hífen" />
       </label>
 
       <label>
@@ -250,6 +246,8 @@
 </div>
 
   </main>
+
+  
 
   <script src="api.js"></script>
   <script src="super.js"></script>
