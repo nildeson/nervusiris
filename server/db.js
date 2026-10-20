@@ -99,6 +99,7 @@ await db.execute(`
         empresaId      INTEGER DEFAULT 1,
         usuario        TEXT    NOT NULL,
         senha          TEXT    NOT NULL,
+        email          TEXT    NOT NULL,
         nome           TEXT    NOT NULL,
         papel          TEXT    NOT NULL DEFAULT 'profissional',
         profissionalId TEXT,
@@ -237,6 +238,10 @@ await adicionarColunaSeFaltar("empresas", "corSecundaria", "TEXT DEFAULT '#1e40a
 await adicionarColunaSeFaltar("empresas", "plano", "TEXT DEFAULT 'trial'");
 await adicionarColunaSeFaltar("empresas", "trialInicio", "TEXT");
 await adicionarColunaSeFaltar("empresas", "trialExpiraEm", "TEXT");
+// ===== Migrações: Recuperação de Senha (coloque AQUI dentro) =====
+await adicionarColunaSeFaltar("usuarios", "email", "TEXT"); // 🆕 Adicionado
+await adicionarColunaSeFaltar("usuarios", "resetToken", "TEXT");
+await adicionarColunaSeFaltar("usuarios", "resetTokenExpira", "TEXT");
 await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
 
     // ---- 6. Seed inicial de profissionais ----
@@ -260,6 +265,7 @@ await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
       console.log("✅ Profissionais iniciais populados");
     }
 
+       // ... final da função anterior ...
     console.log("✅ Tabelas verificadas no Turso");
   } catch (err) {
     console.error("💥 Erro ao inicializar banco Turso:", err);
@@ -267,10 +273,14 @@ await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
   }
 }
 
+// ===================================================================
+// ==========  MIGRAÇÕES EXTRA (RODAM DENTRO DO INICIALIZAR)  ========
+// ===================================================================
+// Nenhum await solto pode existir fora da função inicializarBanco()!
 
-// ===== Migrações: Recuperação de Senha =====
-await adicionarColunaSeFaltar("usuarios", "resetToken", "TEXT");
-await adicionarColunaSeFaltar("usuarios", "resetTokenExpira", "TEXT");
+// (As migrações de usuário agora ficam dentro da função inicializarBanco, 
+//  logo depois das migrações de empresa)
+
 // ===========================  EXPORT  ==============================
 // ===================================================================
 
