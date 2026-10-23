@@ -2,7 +2,8 @@
 // ======================  SERVICE WORKER  ===========================
 // ===================================================================
 
-const CACHE_NAME = "nervus-iris-v1";
+//const CACHE_NAME = "nervus-iris-v1";
+const CACHE_NAME = "nervus-iris-v2"; 
 
 // Arquivos que ficam em cache (o app funcionará offline com eles)
 const ARQUIVOS_CACHE = [
