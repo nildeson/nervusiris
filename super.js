@@ -137,35 +137,61 @@ async function carregarEmpresas() {
     listaEl.innerHTML = "";
 
     empresas.forEach(e => {
-      const div = document.createElement("div");
-      div.className = "empresa-item" + (e.ativo ? "" : " bloqueada");
+  const div = document.createElement("div");
+  div.className = "empresa-item" + (e.ativo ? "" : " bloqueada");
 
-      const tag = e.ativo
-        ? '<span class="tag-ativa">Ativa</span>'
-        : '<span class="tag-ativa tag-bloqueada">Bloqueada</span>';
+  // Formatação do Plano
+  let tagPlano = "";
+  let infoTrial = "";
+  
+  if (e.plano === "trial") {
+    tagPlano = `<span class="tag-plano trial">TRIAL</span>`;
+    if (e.trialExpiraEm) {
+      const agora = new Date();
+      const expira = new Date(e.trialExpiraEm);
+      const dias = Math.ceil((expira - agora) / (1000 * 60 * 60 * 24));
+      
+      if (dias > 0) {
+        infoTrial = `<small style="color:#f59e0b">⏱️ ${dias} dias restantes</small>`;
+      } else {
+        infoTrial = `<small style="color:#ef4444">⏱️ Expirado</small>`;
+      }
+    }
+  } else {
+    tagPlano = `<span class="tag-plano ${e.plano}">${e.plano.toUpperCase()}</span>`;
+  }
 
-      div.innerHTML = `
-        <div class="empresa-info">
-          <strong>${e.nome} ${tag}</strong>
-          <div class="slug">/${e.slug}</div>
-          <div class="contadores">
-            <span>👥 ${e.totalUsuarios} usuários</span>
-            <span>🩺 ${e.totalProfissionais} profissionais</span>
-            <span>📅 ${e.totalConsultas} consultas</span>
-          </div>
-        </div>
-            <div class="empresa-acoes">
-        <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
-          ✏️ Editar
-        </button>
-        <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
-                onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
-          ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
-        </button>
-        </div>
-      `;
-      listaEl.appendChild(div);
-    });
+  const tagAtivo = e.ativo 
+    ? '<span class="tag-ativa">Ativa</span>' 
+    : '<span class="tag-ativa tag-bloqueada">Bloqueada</span>';
+
+  div.innerHTML = `
+    <div class="empresa-info">
+      <strong>${e.nome} ${tagAtivo} ${tagPlano}</strong>
+      <div class="slug">/${e.slug}</div>
+      <div style="margin-bottom: 4px;">${infoTrial}</div>
+      <div class="contadores">
+        <span>👥 ${e.totalUsuarios} usuários</span>
+        <span>🩺 ${e.totalProfissionais} profissionais</span>
+        <span>📅 ${e.totalConsultas} consultas</span>
+      </div>
+    </div>
+    <div class="empresa-acoes">
+      <button class="btn-plano" onclick="abrirModalPlano(${e.id})" title="Gerenciar Plano">
+        💳 Plano
+      </button>
+      <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
+        ✏️ Editar
+      </button>
+      <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
+              onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
+        ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
+      </button>
+    </div>
+  `;
+  listaEl.appendChild(div);
+});
+
   } catch (err) {
     console.error(err);
     listaEl.innerHTML = `<p class="vazio">❌ Erro: ${err.message}</p>`;
@@ -289,5 +315,75 @@ document.getElementById("nomeUsuario").textContent = _usuario.nome || "—";
 // ===================================================================
 // =================  EDITAR EMPRESA  ================================
 // ===================================================================
+
+
+// ===================================================================
+// =================  GERENCIAR PLANO  ===============================
+// ===================================================================
+
+const modalPlano = document.getElementById("modalPlano");
+const formPlano = document.getElementById("formPlano");
+const planoErroBox = document.getElementById("planoErro");
+
+function abrirModalPlano(id) {
+  const e = empresas.find(x => x.id === id);
+  if (!e) return;
+
+  document.getElementById("planoEmpId").value = e.id;
+  document.getElementById("planoEmpNome").textContent = e.nome;
+  document.getElementById("planoSelect").value = e.plano || "trial";
+
+  planoErroBox.innerHTML = "";
+  planoErroBox.classList.remove("visivel");
+  modalPlano.classList.remove("escondido");
+}
+
+function fecharModalPlano() {
+  modalPlano.classList.add("escondido");
+  formPlano.reset();
+}
+
+// Estender +30 dias
+document.getElementById("btnEstenderTrial").addEventListener("click", async () => {
+  const id = Number(document.getElementById("planoEmpId").value);
+  const btn = document.getElementById("btnEstenderTrial");
+  
+  btn.disabled = true;
+  btn.textContent = "Estendendo...";
+
+  try {
+    await API.alterarPlanoEmpresa(id, { diasExtensao: 30 });
+    alert("✅ Trial estendido por +30 dias!");
+    fecharModalPlano();
+    await carregarTudo();
+  } catch (err) {
+    planoErroBox.innerHTML = `<p>❌ ${err.message}</p>`;
+    planoErroBox.classList.add("visivel");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "⏱️ +30 dias de Trial";
+  }
+});
+
+// Salvar Mudança de Plano
+formPlano.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id = Number(document.getElementById("planoEmpId").value);
+  const novoPlano = document.getElementById("planoSelect").value;
+
+  try {
+    await API.alterarPlanoEmpresa(id, { plano: novoPlano });
+    fecharModalPlano();
+    await carregarTudo();
+  } catch (err) {
+    planoErroBox.innerHTML = `<p>❌ ${err.message}</p>`;
+    planoErroBox.classList.add("visivel");
+  }
+});
+
+// Fechar ao clicar fora
+modalPlano.addEventListener("click", (e) => {
+  if (e.target === modalPlano) fecharModalPlano();
+});
 
 carregarTudo();

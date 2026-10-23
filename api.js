@@ -138,6 +138,12 @@ const API = {
     body: JSON.stringify(dados)
   }),
 
+  alterarPlanoEmpresa: (id, dados) =>
+  apiFetch(`/super/empresas/${id}/plano`, {
+    method: "PATCH",
+    body: JSON.stringify(dados)
+  }),
+
   // ===== Pacientes =====
   listarPacientes: (busca = "") =>
     apiFetch("/pacientes" + (busca ? `?q=${encodeURIComponent(busca)}` : "")),

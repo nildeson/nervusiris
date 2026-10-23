@@ -245,6 +245,54 @@
   </div>
 </div>
 
+
+    <!-- MODAL: GERENCIAR PLANO -->
+<div id="modalPlano" class="modal-overlay escondido">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>💳 Gerenciar Plano</h3>
+      <button type="button" class="modal-fechar" onclick="fecharModalPlano()">✕</button>
+    </div>
+
+    <form id="formPlano">
+      <input type="hidden" id="planoEmpId" />
+      
+      <p style="margin-bottom: 15px;">Empresa: <strong id="planoEmpNome"></strong></p>
+
+      <div class="form-grid" style="grid-template-columns: 1fr;">
+        <label>
+          Alterar Plano
+          <select id="planoSelect">
+            <option value="trial">Trial (Teste)</option>
+            <option value="basico">Básico</option>
+            <option value="pro">Pro</option>
+          </select>
+        </label>
+      </div>
+
+      <div style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 10px;">
+          Estender o Trial (O botão abaixo adiciona mais 30 dias ao período atual)
+        </p>
+        <button type="button" id="btnEstenderTrial" class="btn-secundario" style="width: 100%;">
+          ⏱️ +30 dias de Trial
+        </button>
+      </div>
+
+      <div id="planoErro" class="form-erro"></div>
+
+      <div class="modal-acoes">
+        <button type="button" onclick="fecharModalPlano()" class="btn-secundario">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-primario">
+          💾 Salvar Alterações
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
   </main>
 
   

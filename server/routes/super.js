@@ -353,4 +353,40 @@ router.put("/empresas/:id", async (req, res) => {
   }
 });
 
+// ===================================================================
+// =====  PATCH /api/super/empresas/:id/plano  =======================
+// =====  Altera o plano ou estende o trial da empresa  ==============
+// ===================================================================
+router.patch("/empresas/:id/plano", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { plano, diasExtensao } = req.body;
+
+    const existente = await get("SELECT id, trialExpiraEm FROM empresas WHERE id = ?", [id]);
+    if (!existente) return res.status(404).json({ erro: "Empresa não encontrada" });
+
+    if (diasExtensao) {
+      // Lógica para estender o trial
+      let baseDate = existente.trialExpiraEm ? new Date(existente.trialExpiraEm) : new Date();
+      if (baseDate < new Date()) baseDate = new Date(); // Se já expirou, conta a partir de hoje
+      
+      baseDate.setDate(baseDate.getDate() + diasExtensao);
+      
+      await run(
+        "UPDATE empresas SET plano = 'trial', trialExpiraEm = ? WHERE id = ?",
+        [baseDate.toISOString(), id]
+      );
+    } else if (plano) {
+      // Mudar o plano diretamente (ex: 'basico', 'pro')
+      await run("UPDATE empresas SET plano = ? WHERE id = ?", [plano, id]);
+    }
+
+    const atualizada = await get("SELECT id, nome, plano, trialExpiraEm FROM empresas WHERE id = ?", [id]);
+    res.json(atualizada);
+  } catch (err) {
+    console.error("💥", err);
+    res.status(500).json({ erro: "Erro ao alterar plano" });
+  }
+});
+
 module.exports = router;
