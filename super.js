@@ -144,7 +144,9 @@ async function carregarEmpresas() {
   let tagPlano = "";
   let infoTrial = "";
   
-  if (e.plano === "trial") {
+    const planoAtual = e.plano || "trial"; // Se não tiver plano, assume trial
+
+  if (planoAtual === "trial") {
     tagPlano = `<span class="tag-plano trial">TRIAL</span>`;
     if (e.trialExpiraEm) {
       const agora = new Date();
@@ -158,7 +160,7 @@ async function carregarEmpresas() {
       }
     }
   } else {
-    tagPlano = `<span class="tag-plano ${e.plano}">${e.plano.toUpperCase()}</span>`;
+    tagPlano = `<span class="tag-plano ${planoAtual}">${planoAtual.toUpperCase()}</span>`;
   }
 
   const tagAtivo = e.ativo 

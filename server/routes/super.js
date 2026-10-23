@@ -45,7 +45,7 @@ router.get("/empresas", async (req, res) => {
   try {
     const empresas = await all(`
       SELECT e.id, e.nome, e.slug, e.cnpj, e.email, e.telefone, e.whatsapp,
-             e.ativo, e.criadoEm,
+             e.ativo, e.criadoEm, e.plano, e.trialExpiraEm, 
              (SELECT COUNT(*) FROM usuarios u WHERE u.empresaId = e.id) as totalUsuarios,
              (SELECT COUNT(*) FROM consultas c WHERE c.empresaId = e.id) as totalConsultas,
              (SELECT COUNT(*) FROM profissionais p WHERE p.empresaId = e.id AND p.ativo = 1) as totalProfissionais
