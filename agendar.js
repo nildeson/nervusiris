@@ -395,6 +395,30 @@ async function iniciarAgendar() {
     aplicarMascaras();
   }
 
+
+  // ===================================================================
+// =================  BOTÃO WHATSAPP PÚBLICO  ========================
+// ===================================================================
+async function carregarWhatsPublico() {
+  try {
+    const empresa = await API.buscarConfigPublica(); // Puxa os dados da empresa
+    const btn = document.getElementById("btnWhatsPublico");
+    
+    if (btn && empresa.whatsapp) {
+      // Limpa o número (só dígitos)
+      let num = empresa.whatsapp.replace(/\D/g, "");
+      // Adiciona o 55 (Brasil) se não tiver
+      if (!num.startsWith("55")) num = "55" + num;
+      
+      btn.href = `https://wa.me/${num}`;
+      btn.style.display = "inline-block";
+    }
+  } catch (err) {
+    console.error("Erro ao carregar WhatsApp:", err);
+  }
+}
+carregarWhatsPublico();
+
   // Inicializa acuidade
   inicializarAcuidade();
 
@@ -404,5 +428,6 @@ async function iniciarAgendar() {
   // Slots são renderizados sob demanda (quando escolher profissional + data)
   renderizarSlots();
 }
+
 
 iniciarAgendar();

@@ -1,3 +1,11 @@
+// ===================================================================
+// ====================  ROTAS DE EMPRESAS  ==========================
+// ===================================================================
+
+const express = require("express");
+const router = express.Router();
+const { all, get, run } = require("../db");
+const { autenticar, exigirAdmin } = require("../middleware/auth");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -28,22 +36,14 @@ const upload = multer({
     }
   }
 });
-// ===================================================================
-// ====================  ROTAS DE EMPRESAS  ==========================
-// ===================================================================
-
-const express = require("express");
-const router = express.Router();
-const { all, get, run } = require("../db");
-const { autenticar, exigirAdmin } = require("../middleware/auth");
 
 // ===================================================================
-// ===== GET /api/empresas/minha — dados da empresa do usuário  ======
+// ===== GET /api/empresas/minha  ====================================
 // ===================================================================
 router.get("/minha", autenticar, async (req, res) => {
   try {
     const empresa = await get(
-      `SELECT id, nome, slug, cnpj, email, telefone, whatsapp, ativo, criadoEm
+      `SELECT id, nome, slug, cnpj, email, telefone, whatsapp, ativo, logoUrl, corPrimaria, corSecundaria, criadoEm
        FROM empresas WHERE id = ?`,
       [req.usuario.empresaId || 1]
     );
@@ -57,12 +57,12 @@ router.get("/minha", autenticar, async (req, res) => {
 });
 
 // ===================================================================
-// ===== GET /api/empresas/config — config SMTP/WhatsApp (admin)  ====
+// ===== GET /api/empresas/config (admin)  ===========================
 // ===================================================================
 router.get("/config", autenticar, exigirAdmin, async (req, res) => {
   try {
     const empresa = await get(
-      `SELECT id, nome, whatsapp,
+      `SELECT id, nome, whatsapp, logoUrl, corPrimaria, corSecundaria,
               smtpHost, smtpPort, smtpUser, smtpFrom
        FROM empresas WHERE id = ?`,
       [req.usuario.empresaId || 1]
@@ -77,14 +77,13 @@ router.get("/config", autenticar, exigirAdmin, async (req, res) => {
 });
 
 // ===================================================================
-// ===== PUT /api/empresas/config — atualiza config (admin)  =========
+// ===== PUT /api/empresas/config (admin)  ===========================
 // ===================================================================
 router.put("/config", autenticar, exigirAdmin, async (req, res) => {
   try {
     const { nome, whatsapp, smtpHost, smtpPort, smtpUser, smtpPass, smtpFrom } = req.body;
     const empresaId = req.usuario.empresaId || 1;
 
-    // Monta o UPDATE dinamicamente (só altera o que veio)
     const campos = [];
     const valores = [];
 
@@ -108,7 +107,8 @@ router.put("/config", autenticar, exigirAdmin, async (req, res) => {
     );
 
     const atualizada = await get(
-      `SELECT id, nome, whatsapp, smtpHost, smtpPort, smtpUser, smtpFrom
+      `SELECT id, nome, whatsapp, logoUrl, corPrimaria, corSecundaria,
+              smtpHost, smtpPort, smtpUser, smtpFrom
        FROM empresas WHERE id = ?`,
       [empresaId]
     );
@@ -121,10 +121,9 @@ router.put("/config", autenticar, exigirAdmin, async (req, res) => {
 });
 
 // ===================================================================
-// =====  POST /api/empresas/upload-logo  ============================
-// =====  Só admin — faz upload da logo da clínica  ==================
+// ===== POST /api/empresas/upload-logo (admin)  =====================
 // ===================================================================
-router.post("/upload-logo", exigirAdmin, upload.single("logo"), async (req, res) => {
+router.post("/upload-logo", autenticar, exigirAdmin, upload.single("logo"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ erro: "Nenhum arquivo enviado" });
@@ -133,7 +132,6 @@ router.post("/upload-logo", exigirAdmin, upload.single("logo"), async (req, res)
     const empresaId = req.usuario.empresaId || 1;
     const logoUrl = `/uploads/logos/${req.file.filename}`;
 
-    // Salva no banco
     await run("UPDATE empresas SET logoUrl = ? WHERE id = ?", [logoUrl, empresaId]);
 
     res.json({
@@ -147,8 +145,10 @@ router.post("/upload-logo", exigirAdmin, upload.single("logo"), async (req, res)
   }
 });
 
-// ===== DELETE /api/empresas/logo — remove logo =====
-router.delete("/logo", exigirAdmin, async (req, res) => {
+// ===================================================================
+// ===== DELETE /api/empresas/logo (admin)  ==========================
+// ===================================================================
+router.delete("/logo", autenticar, exigirAdmin, async (req, res) => {
   try {
     const empresaId = req.usuario.empresaId || 1;
     await run("UPDATE empresas SET logoUrl = NULL WHERE id = ?", [empresaId]);
@@ -160,7 +160,27 @@ router.delete("/logo", exigirAdmin, async (req, res) => {
 });
 
 // ===================================================================
-// =====  GET /api/empresas/status-trial  ============================
+// ===== PUT /api/empresas/cores (admin)  ============================
+// ===================================================================
+router.put("/cores", autenticar, exigirAdmin, async (req, res) => {
+  try {
+    const { corPrimaria, corSecundaria } = req.body;
+    const empresaId = req.usuario.empresaId || 1;
+
+    await run(
+      "UPDATE empresas SET corPrimaria = ?, corSecundaria = ? WHERE id = ?",
+      [corPrimaria, corSecundaria, empresaId]
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("💥", err);
+    res.status(500).json({ erro: "Erro ao salvar cores" });
+  }
+});
+
+// ===================================================================
+// ===== GET /api/empresas/status-trial  =============================
 // ===================================================================
 router.get("/status-trial", autenticar, async (req, res) => {
   try {
