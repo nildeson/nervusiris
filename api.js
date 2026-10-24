@@ -192,5 +192,8 @@ const API = {
     apiFetch("/agenda/agendar", {
       method: "POST",
       body: JSON.stringify(dados)
-    })
+    }),
+
+    salvarExame: (dados) => apiFetch("/exames", { method: "POST", body: JSON.stringify(dados) }),
+listarExamesPaciente: (pacienteId) => apiFetch(`/exames/paciente/${pacienteId}`),
 };

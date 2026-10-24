@@ -235,6 +235,18 @@ async function abrirProntuario(pacienteId) {
       html += '</div>';
     }
 
+        // Botão para abrir o Exame
+        html += `
+          <div class="secao-titulo">
+            <h4>👁️ Exames Optométricos</h4>
+            <button onclick="abrirModalExame(${pacienteId})">➕ Novo Exame</button>
+          </div>
+          <div id="listaExamesOpt" class="lista-consultas-pront">
+            <p class="vazio">Carregando exames...</p>
+          </div>
+        `;
+
+
     // Anotações
     html += `
       <div class="secao-titulo">
@@ -720,6 +732,82 @@ async function imprimirReceita(receitaId) {
     setTimeout(() => janela.print(), 300);
   } catch (err) {
     alert("Erro ao imprimir: " + err.message);
+  }
+}
+
+
+// ===================================================================
+// =================  EXAMES OPTOMÉTRICOS  ===========================
+// ===================================================================
+const modalExame = document.getElementById("modalExameOptometrico");
+const formExame = document.getElementById("formExameOptometrico");
+
+function abrirModalExame(pacienteId) {
+  document.getElementById("examePacienteId").value = pacienteId;
+  formExame.reset();
+  modalExame.classList.remove("escondido");
+}
+
+function fecharModalExame() {
+  modalExame.classList.add("escondido");
+}
+
+formExame.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const erroBox = document.getElementById("exameErro");
+  erroBox.classList.remove("visivel");
+
+  const dados = {
+    pacienteId: Number(document.getElementById("examePacienteId").value),
+    anamnese: document.getElementById("exameAnamnese").value,
+    acuidade_od_longe: document.getElementById("exameAcuidadeODLonge").value,
+    acuidade_os_longe: document.getElementById("exameAcuidadeOSLonge").value,
+    acuidade_od_perto: document.getElementById("exameAcuidadeODPerto").value,
+    acuidade_os_perto: document.getElementById("exameAcuidadeOSPerto").value,
+    autorrefrator: document.getElementById("exameAutorrefrator").value,
+    refracao: document.getElementById("exameRefracao").value,
+    motilidade: document.getElementById("exameMotilidade").value,
+    visao_cores: document.getElementById("exameVisaoCores").value,
+    fundo_olho: document.getElementById("exameFundoOlho").value
+  };
+
+  try {
+    await API.salvarExame(dados);
+    fecharModalExame();
+    carregarExamesOptometricos(dados.pacienteId);
+  } catch (err) {
+    erroBox.innerHTML = `<p>❌ ${err.message}</p>`;
+    erroBox.classList.add("visivel");
+  }
+});
+
+// Função para carregar e exibir os exames salvos no prontuário
+async function carregarExamesOptometricos(pacienteId) {
+  const container = document.getElementById("listaExamesOpt");
+  if (!container) return;
+
+  try {
+    const exames = await API.listarExamesPaciente(pacienteId);
+    if (exames.length === 0) {
+      container.innerHTML = '<p class="vazio">Nenhum exame registrado.</p>';
+      return;
+    }
+
+    container.innerHTML = exames.map(e => `
+      <div class="consulta-pront" style="border-left-color: #0ea5e9;">
+        <div class="cabecalho">
+          <strong>Exame Optométrico</strong>
+          <span class="data">${new Date(e.criadoEm).toLocaleDateString("pt-BR")}</span>
+        </div>
+        <div class="detalhes">
+          <p><strong>Acuidade OD:</strong> ${e.acuidade_od_longe || "-"} | <strong>OS:</strong> ${e.acuidade_os_longe || "-"}</p>
+          <p><strong>Refração:</strong> ${e.refracao || "-"}</p>
+          <p><strong>Fundo de Olho:</strong> ${e.fundo_olho || "-"}</p>
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    container.innerHTML = `<p class="vazio">❌ Erro ao carregar exames.</p>`;
   }
 }
 

@@ -215,6 +215,30 @@ await db.execute(`
   );
 `);
 
+// ===== Tabela: Exames Optométricos =====
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS exames_optometricos (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    empresaId          INTEGER NOT NULL,
+    pacienteId         INTEGER NOT NULL,
+    consultaId         INTEGER,
+    profissionalId     TEXT,
+    
+    anamnese           TEXT,
+    acuidade_od_longe  TEXT,
+    acuidade_os_longe  TEXT,
+    acuidade_od_perto  TEXT,
+    acuidade_os_perto  TEXT,
+    autorrefrator      TEXT,
+    refracao           TEXT,
+    motilidade         TEXT,
+    visao_cores        TEXT,
+    fundo_olho         TEXT,
+    
+    criadoEm           TEXT DEFAULT CURRENT_TIMESTAMP
+  );
+`);
+
 
 
 // ===== Migração: adicionar pacienteId em consultas =====

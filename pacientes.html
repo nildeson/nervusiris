@@ -190,7 +190,7 @@
 <div id="modalReceita" class="modal-overlay escondido">
   <div class="modal modal-grande">
     <div class="modal-header">
-      <h3>💊 Nova Receita</h3>
+      <h3> Nova Receita</h3>
       <button type="button" class="modal-fechar" onclick="fecharModalReceita()">✕</button>
     </div>
 
@@ -263,6 +263,79 @@
       <div class="modal-acoes">
         <button type="button" onclick="fecharModalReceita()" class="btn-secundario">Cancelar</button>
         <button type="submit" class="btn-primario">💾 Salvar receita</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: FICHA DE EXAMES OPTOMÉTRICOS -->
+<div id="modalExameOptometrico" class="modal-overlay escondido">
+  <div class="modal modal-grande">
+    <div class="modal-header">
+      <h3>👁️ Ficha de Exames Optométricos</h3>
+      <button type="button" class="modal-fechar" onclick="fecharModalExame()">✕</button>
+    </div>
+
+    <form id="formExameOptometrico">
+      <input type="hidden" id="examePacienteId" />
+
+      <h4 style="color:#0369a1;">1. Anamnese</h4>
+      <label>
+        Histórico e Queixas
+        <textarea id="exameAnamnese" rows="2" placeholder="Queixas visuais, histórico clínico..."></textarea>
+      </label>
+
+      <h4 style="color:#0369a1; margin-top:15px;">2. Acuidade Visual</h4>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <label>OD (Longe) <input type="text" id="exameAcuidadeODLonge" placeholder="20/20"></label>
+        <label>OS (Longe) <input type="text" id="exameAcuidadeOSLonge" placeholder="20/20"></label>
+        <label>OD (Perto) <input type="text" id="exameAcuidadeODPerto" placeholder="J1"></label>
+        <label>OS (Perto) <input type="text" id="exameAcuidadeOSPerto" placeholder="J1"></label>
+      </div>
+
+      <h4 style="color:#0369a1; margin-top:15px;">3. Autorrefrator / Refração</h4>
+      <label>
+        Resultados do Autorrefrator e Refração
+        <textarea id="exameAutorrefrator" rows="2" placeholder="Ex: OD -2.50 / OE -2.75..."></textarea>
+      </label>
+      <label>
+        Refração Final
+        <textarea id="exameRefracao" rows="2" placeholder="Ex: OD -2.25 CIL -0.50 EIXO 180..."></textarea>
+      </label>
+
+      <h4 style="color:#0369a1; margin-top:15px;">4. Motilidade e Visão de Cores</h4>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <label>
+          Motilidade Ocular
+          <select id="exameMotilidade">
+            <option value="Normal">Normal</option>
+            <option value="Estrabismo">Estrabismo</option>
+            <option value="Alterada">Alterada</option>
+          </select>
+        </label>
+        <label>
+          Teste de Cores (Ishihara)
+          <select id="exameVisaoCores">
+            <option value="Normal">Normal</option>
+            <option value="Alterado">Alterado (Suspeita de Daltonismo)</option>
+          </select>
+        </label>
+      </div>
+
+      <h4 style="color:#0369a1; margin-top:15px;">5. Fundo de Olho (Triagem)</h4>
+      <label>
+        Observações do Fundo de Olho
+        <select id="exameFundoOlho">
+          <option value="Normal">Normal (Reflexo presente)</option>
+          <option value="Alterado">Alterado (Encaminhar Oftalmologista)</option>
+        </select>
+      </label>
+
+      <div id="exameErro" class="form-erro"></div>
+
+      <div class="modal-acoes">
+        <button type="button" onclick="fecharModalExame()" class="btn-secundario">Cancelar</button>
+        <button type="submit" class="btn-primario">💾 Salvar Exame</button>
       </div>
     </form>
   </div>
