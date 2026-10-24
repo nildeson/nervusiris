@@ -25,14 +25,16 @@ const CONFIG = {
 // ===== Cadastros =====
 let PROFISSIONAIS = [];
 
-
-const SALAS = [
+let SALAS =[];
+/*const SALAS = [
   { id: "s1", nome: "Sala 1 - Refração" },
   { id: "s2", nome: "Sala 2 - Refração" },
   { id: "s3", nome: "Sala 3 - Consultório" },
   { id: "s4", nome: "Sala 4 - Odontologia" },
   { id: "s5", nome: "Sala 5 - Psicologia" }
-];
+];*/
+
+
 
 const DURACOES = {
   "Optometria":      30,
@@ -572,22 +574,16 @@ function popularProfissionaisESalas() {
 }
 
 function popularFiltrosCalendario() {
-  function popularFiltrosCalendario() {
   const selProf = document.getElementById("calFiltroProf");
   const selSala = document.getElementById("calFiltroSala");
   const selEsp  = document.getElementById("calFiltroEsp");
   if (!selProf || !selSala || !selEsp) return;
 
-  // Se for profissional, esconde o filtro de profissional
   if (!souAdmin()) {
     selProf.style.display = "none";
+  } else {
+    selProf.style.display = "";
   }
-  // ... resto igual
-}
-  const selProf = document.getElementById("calFiltroProf");
-  const selSala = document.getElementById("calFiltroSala");
-  const selEsp  = document.getElementById("calFiltroEsp");
-  if (!selProf || !selSala || !selEsp) return;
 
   selProf.innerHTML = '<option value="">👨‍⚕️ Todos profissionais</option>';
   PROFISSIONAIS.forEach(p => {
@@ -604,6 +600,7 @@ function popularFiltrosCalendario() {
     selEsp.innerHTML += `<option value="${e}">${e}</option>`;
   });
 }
+
 
 ["calFiltroProf", "calFiltroSala", "calFiltroEsp"].forEach(id => {
   const el = document.getElementById(id);
@@ -970,7 +967,7 @@ async function iniciarApp() {
 
   // 1. Carrega profissionais PRIMEIRO
   await carregarProfissionais();
-
+  SALAS = await API.listarSalas(); 
   // 2. Agora popula tudo (usa PROFISSIONAIS já carregado)
   popularProfissionaisESalas();
   popularFiltrosCalendario();
@@ -1300,7 +1297,7 @@ async function carregarLogoHeader() {
     const nome = document.getElementById("nomeHeader");
 
     if (empresa.logoUrl) {
-      logo.src = `http://localhost:3000${empresa.logoUrl}`;
+      logo.src = `${API_URL.replace('/api', '')}${empresa.logoUrl}`;
       logo.style.display = "inline";
       if (nome) nome.textContent = empresa.nome;
     } else if (empresa.nome) {

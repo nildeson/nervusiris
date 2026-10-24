@@ -24,17 +24,40 @@ router.get("/estatisticas", async (req, res) => {
     const usuarios = await get("SELECT COUNT(*) as n FROM usuarios WHERE papel != 'super'");
     const consultas = await get("SELECT COUNT(*) as n FROM consultas");
     const profissionais = await get("SELECT COUNT(*) as n FROM profissionais WHERE ativo = 1");
+    
+    // 🆕 Financeiro
+    const mrr = await get("SELECT SUM(valorMensalidade) as total FROM empresas WHERE ativo = 1 AND plano != 'trial'");
+    const pendentes = await get("SELECT SUM(valorMensalidade) as total FROM empresas WHERE statusPagamento = 'pendente'");
 
     res.json({
       empresas: Number(empresas.n),
       empresasAtivas: Number(ativas.n),
       usuarios: Number(usuarios.n),
       consultas: Number(consultas.n),
-      profissionais: Number(profissionais.n)
+      profissionais: Number(profissionais.n),
+      faturamentoMensal: Number(mrr.total || 0),
+      faturamentoPendente: Number(pendentes.total || 0)
     });
   } catch (err) {
-    console.error("💥", err);
     res.status(500).json({ erro: "Erro ao buscar estatísticas" });
+  }
+});
+// ===================================================================
+// =====  PATCH /api/super/empresas/:id/financeiro  ==================
+// ===================================================================
+router.patch("/empresas/:id/financeiro", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { valorMensalidade, diaVencimento, statusPagamento } = req.body;
+
+    await run(
+      "UPDATE empresas SET valorMensalidade = ?, diaVencimento = ?, statusPagamento = ? WHERE id = ?",
+      [valorMensalidade, diaVencimento, statusPagamento, id]
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao atualizar financeiro" });
   }
 });
 

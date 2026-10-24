@@ -170,6 +170,10 @@ app.get("/api/empresas/por-dominio", async (req, res) => {
   if (!empresa) return res.status(404).json({ erro: "Empresa não encontrada" });
   res.json(empresa);
 });
+
+const salasRouter = require("./routes/salas");
+app.use("/api/salas", salasRouter);
+
 // ===================================================================
 // ===========  ROTAS PROTEGIDAS (AUTENTICAÇÃO + TRIAL)  =============
 // ===================================================================

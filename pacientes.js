@@ -319,7 +319,6 @@ async function abrirProntuario(pacienteId) {
       </div>
     </div>
   </div>
-
         `;
       });
       html += '</div>';
@@ -328,7 +327,7 @@ async function abrirProntuario(pacienteId) {
     conteudoProntuario.innerHTML = html;
   } catch (err) {
     console.error(err);
-    conteudoProntuario.innerHTML = `< p class="vazio" >❌ Erro: ${ err.message }</p > `;
+    conteudoProntuario.innerHTML = `< p class="vazio" >❌ Erro: ${err.message}</p > `;
   }
 }
 
@@ -676,7 +675,11 @@ async function imprimirReceita(receitaId) {
                   </style>
               </head>
               <body>
-                <h1>👁️ Receita ${r.tipo === "lentes" ? "de Lentes de Contato" : "de Óculos"}</h1>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;">
+                    <span style="font-family: 'Times New Roman', serif; font-size: 2.2rem; font-style: italic; font-weight: bold; color: #0f172a;">Rx</span>
+                    <span style="font-size: 2rem;">👁️</span>
+                 </div>
+                  <h1 style="font-size: 1.5rem;">Receita ${r.tipo === "lentes" ? "de Lentes de Contato" : "de Óculos"}</h1>
                 <p class="subtitulo">Emitida em ${new Date(r.criadoEm).toLocaleDateString("pt-BR")}</p>
 
                 <div class="paciente">
@@ -712,6 +715,17 @@ async function imprimirReceita(receitaId) {
                     </tr>
                   </tbody>
                 </table>
+
+                  <!-- 👇 COLE O BLOCO DE PRISMAS AQUI 👇 -->
+        ${r.od_prisma || r.oe_prisma ? `
+          <div style="margin-top: 10px; font-size: 1.1rem; background: #f0f9ff; padding: 10px; border-radius: 8px; border-left: 4px solid #0ea5e9;">
+            <strong>PRISMAS:</strong> 
+            ${r.od_prisma ? `<span>OD: ${r.od_prisma}</span>` : ""} 
+            ${r.oe_prisma ? `<span> | OE: ${r.oe_prisma}</span>` : ""}
+          </div>
+        ` : ""}
+        <!-- 👆 FIM DO BLOCO DE PRISMAS 👆 -->
+
 
                 ${r.adicao ? `
           <div class="adicao-box">
@@ -782,7 +796,7 @@ formExame.addEventListener("submit", async (e) => {
     fecharModalExame();
     carregarExamesOptometricos(dados.pacienteId);
   } catch (err) {
-    erroBox.innerHTML = `< p >❌ ${ err.message }</p > `;
+    erroBox.innerHTML = `< p >❌ ${err.message}</p > `;
     erroBox.classList.add("visivel");
   }
 });

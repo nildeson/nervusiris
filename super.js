@@ -115,11 +115,15 @@ async function carregarEstatisticas() {
     document.getElementById("kpiUsuarios").textContent = stats.usuarios;
     document.getElementById("kpiConsultas").textContent = stats.consultas;
     document.getElementById("kpiProfissionais").textContent = stats.profissionais;
+    
+    // 🆕 Financeiro
+    const formatarDinheiro = (val) => val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById("kpiFaturamento").textContent = formatarDinheiro(stats.faturamentoMensal);
+    document.getElementById("kpiPendente").textContent = formatarDinheiro(stats.faturamentoPendente);
   } catch (err) {
     console.error("Erro ao carregar estatísticas:", err);
   }
 }
-
 async function carregarEmpresas() {
   const listaEl = document.getElementById("listaEmpresas");
   listaEl.innerHTML = '<p class="vazio">Carregando...</p>';
@@ -179,12 +183,9 @@ async function carregarEmpresas() {
       </div>
     </div>
     <div class="empresa-acoes">
-      <button class="btn-plano" onclick="abrirModalPlano(${e.id})" title="Gerenciar Plano">
-        💳 Plano
-      </button>
-      <button class="btn-editar" onclick="abrirModalEditar(${e.id})" title="Editar empresa">
-        ✏️ Editar
-      </button>
+            <button class="btn-plano" onclick="abrirModalPlano(${e.id})">💳 Plano</button>
+      <button class="btn-financeiro" onclick="abrirModalFinanceiro(${e.id})" style="background:#dcfce7; color:#166534;">💰 Financeiro</button>
+      <button class="btn-editar" onclick="abrirModalEditar(${e.id})">✏️ Editar</button>
       <button class="btn-bloquear ${e.ativo ? '' : 'btn-desbloquear'}"
               onclick="alternarAtivo(${e.id}, ${e.ativo ? 0 : 1})">
         ${e.ativo ? "🔒 Bloquear" : "🔓 Desbloquear"}
@@ -292,6 +293,46 @@ async function alternarAtivo(empresaId, novoAtivo) {
     alert("Erro: " + err.message);
   }
 }
+
+const modalFinanceiro = document.getElementById("modalFinanceiro");
+const formFinanceiro = document.getElementById("formFinanceiro");
+
+function abrirModalFinanceiro(id) {
+  const e = empresas.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById("finEmpId").value = e.id;
+  document.getElementById("finEmpNome").textContent = e.nome;
+  document.getElementById("finValor").value = e.valorMensalidade || "";
+  document.getElementById("finVencimento").value = e.diaVencimento || 10;
+  document.getElementById("finStatus").value = e.statusPagamento || "pendente";
+  modalFinanceiro.classList.remove("escondido");
+}
+
+function fecharModalFinanceiro() {
+  modalFinanceiro.classList.add("escondido");
+  formFinanceiro.reset();
+}
+
+formFinanceiro.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id = Number(document.getElementById("finEmpId").value);
+  const dados = {
+    valorMensalidade: Number(document.getElementById("finValor").value),
+    diaVencimento: Number(document.getElementById("finVencimento").value),
+    statusPagamento: document.getElementById("finStatus").value
+  };
+  try {
+    await apiFetch(`/super/empresas/${id}/financeiro`, { method: "PATCH", body: JSON.stringify(dados) });
+    fecharModalFinanceiro();
+    await carregarTudo();
+  } catch (err) {
+    alert("Erro ao salvar: " + err.message);
+  }
+});
+
+modalFinanceiro.addEventListener("click", (e) => {
+  if (e.target === modalFinanceiro) fecharModalFinanceiro();
+});
 
 // ===================================================================
 // =========================  LOGOUT  ================================

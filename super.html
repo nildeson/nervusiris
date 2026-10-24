@@ -63,6 +63,22 @@
         </div>
       </div>
 
+            <div class="kpi-card" style="border-left: 4px solid #22c55e;">
+        <div class="kpi-icone">💰</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Faturamento (MRR)</div>
+          <div class="kpi-valor" id="kpiFaturamento">R$ 0</div>
+        </div>
+      </div>
+
+      <div class="kpi-card" style="border-left: 4px solid #ef4444;">
+        <div class="kpi-icone">⚠️</div>
+        <div class="kpi-info">
+          <div class="kpi-label">Pendente</div>
+          <div class="kpi-valor" id="kpiPendente">R$ 0</div>
+        </div>
+      </div>
+
       <div class="kpi-card">
         <div class="kpi-icone">🩺</div>
         <div class="kpi-info">
@@ -288,6 +304,40 @@
         <button type="submit" class="btn-primario">
           💾 Salvar Alterações
         </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: FINANCEIRO -->
+<div id="modalFinanceiro" class="modal-overlay escondido">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>💰 Financeiro</h3>
+      <button type="button" class="modal-fechar" onclick="fecharModalFinanceiro()">✕</button>
+    </div>
+    <form id="formFinanceiro">
+      <input type="hidden" id="finEmpId" />
+      <p style="margin-bottom: 15px;">Empresa: <strong id="finEmpNome"></strong></p>
+
+      <label>Valor da Mensalidade (R$)
+        <input type="number" step="0.01" id="finValor" required placeholder="199.90" />
+      </label>
+
+      <label>Dia do Vencimento
+        <input type="number" min="1" max="31" id="finVencimento" required placeholder="10" />
+      </label>
+
+      <label>Status do Pagamento
+        <select id="finStatus">
+          <option value="pendente">Pendente</option>
+          <option value="pago">Pago</option>
+        </select>
+      </label>
+
+      <div class="modal-acoes">
+        <button type="button" onclick="fecharModalFinanceiro()" class="btn-secundario">Cancelar</button>
+        <button type="submit" class="btn-primario">💾 Salvar Financeiro</button>
       </div>
     </form>
   </div>

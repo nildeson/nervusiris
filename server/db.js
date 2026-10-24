@@ -239,6 +239,33 @@ await db.execute(`
   );
 `);
 
+// ===== Tabela: Salas =====
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS salas (
+    id        TEXT NOT NULL,
+    empresaId INTEGER NOT NULL,
+    nome      TEXT NOT NULL,
+    ativo     INTEGER DEFAULT 1,
+    PRIMARY KEY (empresaId, id)
+  );
+`);
+
+// Popula salas padrão para a empresa 1 (se não existirem)
+const totalSalas = await get("SELECT COUNT(*) as n FROM salas WHERE empresaId = 1");
+if (Number(totalSalas.n) === 0) {
+  const salasIniciais = [
+    { id: "s1", nome: "Sala 1 - Refração" },
+    { id: "s2", nome: "Sala 2 - Refração" },
+    { id: "s3", nome: "Sala 3 - Consultório" },
+    { id: "s4", nome: "Sala 4 - Odontologia" },
+    { id: "s5", nome: "Sala 5 - Psicologia" }
+  ];
+  for (const s of salasIniciais) {
+    await run("INSERT INTO salas (empresaId, id, nome) VALUES (1, ?, ?)", [s.id, s.nome]);
+  }
+  console.log("✅ Salas iniciais populadas");
+}
+
 
 
 // ===== Migração: adicionar pacienteId em consultas =====
@@ -268,9 +295,15 @@ await adicionarColunaSeFaltar("usuarios", "resetToken", "TEXT");
 await adicionarColunaSeFaltar("usuarios", "resetTokenExpira", "TEXT");
 await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
 
+// ===== Migrações: Financeiro =====
+await adicionarColunaSeFaltar("empresas", "valorMensalidade", "REAL DEFAULT 0");
+await adicionarColunaSeFaltar("empresas", "diaVencimento", "INTEGER DEFAULT 10");
+await adicionarColunaSeFaltar("empresas", "statusPagamento", "TEXT DEFAULT 'pendente'"); // 'pago' ou 'pendente'
+
 // ===== Migrações: Prismas na receita =====
 await adicionarColunaSeFaltar("receitas", "od_prisma", "TEXT");
 await adicionarColunaSeFaltar("receitas", "oe_prisma", "TEXT");
+
 
     // ---- 6. Seed inicial de profissionais ----
     const totalProf = await get("SELECT COUNT(*) as n FROM profissionais");
