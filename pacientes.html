@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,12 +9,13 @@
   <link rel="stylesheet" href="pacientes.css" />
   <link rel="icon" href="data:,">
 </head>
+
 <body>
 
- <header>
-  <h1>👥 Pacientes</h1>
-  <p>Prontuários e histórico — Nervus Iris</p>
- 
+  <header>
+    <h1>👥 Pacientes</h1>
+    <p>Prontuários e histórico — Nervus Iris</p>
+
     <div class="header-user">
       <span class="user-badge">
         <span class="user-icone">👤</span>
@@ -29,12 +31,7 @@
 
     <!-- BARRA DE AÇÕES -->
     <div class="pacientes-barra">
-      <input
-        type="text"
-        id="busca"
-        class="busca-pacientes"
-        placeholder="🔍 Buscar por nome, CPF ou telefone..."
-      />
+      <input type="text" id="busca" class="busca-pacientes" placeholder="🔍 Buscar por nome, CPF ou telefone..." />
       <button id="btnNovoPaciente" class="btn-primario btn-novo">
         ➕ Novo paciente
       </button>
@@ -187,162 +184,171 @@
   </div>
 
   <!-- MODAL: NOVA RECEITA -->
-<div id="modalReceita" class="modal-overlay escondido">
-  <div class="modal modal-grande">
-    <div class="modal-header">
-      <h3> Nova Receita</h3>
-      <button type="button" class="modal-fechar" onclick="fecharModalReceita()">✕</button>
-    </div>
-
-    <form id="formReceita">
-      <input type="hidden" id="recPacienteId" />
-      <input type="hidden" id="recReceitaId" />
-
-      <label>
-        Tipo
-        <select id="recTipo">
-          <option value="oculos">👓 Óculos</option>
-          <option value="lentes">👁️ Lentes de contato</option>
-        </select>
-      </label>
-
-      <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Direito (OD)</h4>
-      <div class="grade-receita">
-        <label>ESF Longe
-          <input type="number" step="0.25" id="odEsfLonge" placeholder="-2.50" />
-        </label>
-        <label>CIL Longe
-          <input type="number" step="0.25" id="odCilLonge" placeholder="-0.75" />
-        </label>
-        <label>EIXO
-          <input type="number" min="0" max="180" id="odEixoLonge" placeholder="90" />
-        </label>
-        <label>DP
-          <input type="number" step="0.5" id="odDp" placeholder="30" />
-        </label>
+  <div id="modalReceita" class="modal-overlay escondido">
+    <div class="modal modal-grande">
+      <div class="modal-header">
+        <h3> Nova Receita</h3>
+        <button type="button" class="modal-fechar" onclick="fecharModalReceita()">✕</button>
       </div>
 
-      <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Esquerdo (OE)</h4>
-      <div class="grade-receita">
-        <label>ESF Longe
-          <input type="number" step="0.25" id="oeEsfLonge" placeholder="-2.75" />
-        </label>
-        <label>CIL Longe
-          <input type="number" step="0.25" id="oeCilLonge" placeholder="-0.50" />
-        </label>
-        <label>EIXO
-          <input type="number" min="0" max="180" id="oeEixoLonge" placeholder="85" />
-        </label>
-        <label>DP
-          <input type="number" step="0.5" id="oeDp" placeholder="31" />
-        </label>
-      </div>
+      <form id="formReceita">
+        <input type="hidden" id="recPacienteId" />
+        <input type="hidden" id="recReceitaId" />
 
-      <h4 style="color:#0369a1;margin:20px 0 12px;">📖 Adição (perto)</h4>
-      <div class="grade-receita">
-        <label>Adição
-          <input type="number" step="0.25" id="recAdicao" placeholder="2.00" />
+        <label>
+          Tipo
+          <select id="recTipo">
+            <option value="oculos">👓 Óculos</option>
+            <option value="lentes">👁️ Lentes de contato</option>
+          </select>
         </label>
-      </div>
 
-      <div class="preview-perto">
-        <p style="margin:0 0 8px 0;font-size:0.85rem;color:#0369a1;font-weight:600;">🔢 Cálculo automático do grau de perto:</p>
-        <div class="preview-graus">
-          <div>👁️ <strong>OD perto:</strong> <span id="previewOdPerto">—</span></div>
-          <div>👁️ <strong>OE perto:</strong> <span id="previewOePerto">—</span></div>
+        <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Direito (OD)</h4>
+        <div class="grade-receita">
+          <label>ESF Longe
+            <input type="number" step="0.25" id="odEsfLonge" placeholder="-2.50" />
+          </label>
+          <label>CIL Longe
+            <input type="number" step="0.25" id="odCilLonge" placeholder="-0.75" />
+          </label>
+          <label>EIXO
+            <input type="number" min="0" max="180" id="odEixoLonge" placeholder="90" />
+          </label>
+          <label>DP
+            <input type="number" step="0.5" id="odDp" placeholder="30" />
+          </label>
+          <label>Prisma
+            <input type="text" id="odPrisma" placeholder="Ex: 2.0 BO" />
+          </label>
         </div>
-      </div>
 
-      <label>
-        Observações
-        <textarea id="recObservacoes" rows="2" placeholder="Ex: Usar somente para leitura / longa distância..."></textarea>
-      </label>
+        <h4 style="color:#0369a1;margin:20px 0 12px;">👁️ Olho Esquerdo (OE)</h4>
+        <div class="grade-receita">
+          <label>ESF Longe
+            <input type="number" step="0.25" id="oeEsfLonge" placeholder="-2.75" />
+          </label>
+          <label>CIL Longe
+            <input type="number" step="0.25" id="oeCilLonge" placeholder="-0.50" />
+          </label>
+          <label>EIXO
+            <input type="number" min="0" max="180" id="oeEixoLonge" placeholder="85" />
+          </label>
+          <label>DP
+            <input type="number" step="0.5" id="oeDp" placeholder="31" />
+          </label>
+          <label>Prisma
+            <input type="text" id="oePrisma" placeholder="Ex: 2.0 BO" />
+          </label>
+        </div>
 
-      <div id="recErro" class="form-erro"></div>
+        <h4 style="color:#0369a1;margin:20px 0 12px;">📖 Adição (perto)</h4>
+        <div class="grade-receita">
+          <label>Adição
+            <input type="number" step="0.25" id="recAdicao" placeholder="2.00" />
+          </label>
+        </div>
 
-      <div class="modal-acoes">
-        <button type="button" onclick="fecharModalReceita()" class="btn-secundario">Cancelar</button>
-        <button type="submit" class="btn-primario">💾 Salvar receita</button>
-      </div>
-    </form>
-  </div>
-</div>
+        <div class="preview-perto">
+          <p style="margin:0 0 8px 0;font-size:0.85rem;color:#0369a1;font-weight:600;">🔢 Cálculo automático do grau de
+            perto:</p>
+          <div class="preview-graus">
+            <div>👁️ <strong>OD perto:</strong> <span id="previewOdPerto">—</span></div>
+            <div>👁️ <strong>OE perto:</strong> <span id="previewOePerto">—</span></div>
+          </div>
+        </div>
 
-<!-- MODAL: FICHA DE EXAMES OPTOMÉTRICOS -->
-<div id="modalExameOptometrico" class="modal-overlay escondido">
-  <div class="modal modal-grande">
-    <div class="modal-header">
-      <h3>👁️ Ficha de Exames Optométricos</h3>
-      <button type="button" class="modal-fechar" onclick="fecharModalExame()">✕</button>
+        <label>
+          Observações
+          <textarea id="recObservacoes" rows="2"
+            placeholder="Ex: Usar somente para leitura / longa distância..."></textarea>
+        </label>
+
+        <div id="recErro" class="form-erro"></div>
+
+        <div class="modal-acoes">
+          <button type="button" onclick="fecharModalReceita()" class="btn-secundario">Cancelar</button>
+          <button type="submit" class="btn-primario">💾 Salvar receita</button>
+        </div>
+      </form>
     </div>
-
-    <form id="formExameOptometrico">
-      <input type="hidden" id="examePacienteId" />
-
-      <h4 style="color:#0369a1;">1. Anamnese</h4>
-      <label>
-        Histórico e Queixas
-        <textarea id="exameAnamnese" rows="2" placeholder="Queixas visuais, histórico clínico..."></textarea>
-      </label>
-
-      <h4 style="color:#0369a1; margin-top:15px;">2. Acuidade Visual</h4>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <label>OD (Longe) <input type="text" id="exameAcuidadeODLonge" placeholder="20/20"></label>
-        <label>OS (Longe) <input type="text" id="exameAcuidadeOSLonge" placeholder="20/20"></label>
-        <label>OD (Perto) <input type="text" id="exameAcuidadeODPerto" placeholder="J1"></label>
-        <label>OS (Perto) <input type="text" id="exameAcuidadeOSPerto" placeholder="J1"></label>
-      </div>
-
-      <h4 style="color:#0369a1; margin-top:15px;">3. Autorrefrator / Refração</h4>
-      <label>
-        Resultados do Autorrefrator e Refração
-        <textarea id="exameAutorrefrator" rows="2" placeholder="Ex: OD -2.50 / OE -2.75..."></textarea>
-      </label>
-      <label>
-        Refração Final
-        <textarea id="exameRefracao" rows="2" placeholder="Ex: OD -2.25 CIL -0.50 EIXO 180..."></textarea>
-      </label>
-
-      <h4 style="color:#0369a1; margin-top:15px;">4. Motilidade e Visão de Cores</h4>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <label>
-          Motilidade Ocular
-          <select id="exameMotilidade">
-            <option value="Normal">Normal</option>
-            <option value="Estrabismo">Estrabismo</option>
-            <option value="Alterada">Alterada</option>
-          </select>
-        </label>
-        <label>
-          Teste de Cores (Ishihara)
-          <select id="exameVisaoCores">
-            <option value="Normal">Normal</option>
-            <option value="Alterado">Alterado (Suspeita de Daltonismo)</option>
-          </select>
-        </label>
-      </div>
-
-      <h4 style="color:#0369a1; margin-top:15px;">5. Fundo de Olho (Triagem)</h4>
-      <label>
-        Observações do Fundo de Olho
-        <select id="exameFundoOlho">
-          <option value="Normal">Normal (Reflexo presente)</option>
-          <option value="Alterado">Alterado (Encaminhar Oftalmologista)</option>
-        </select>
-      </label>
-
-      <div id="exameErro" class="form-erro"></div>
-
-      <div class="modal-acoes">
-        <button type="button" onclick="fecharModalExame()" class="btn-secundario">Cancelar</button>
-        <button type="submit" class="btn-primario">💾 Salvar Exame</button>
-      </div>
-    </form>
   </div>
-</div>
+
+  <!-- MODAL: FICHA DE EXAMES OPTOMÉTRICOS -->
+  <div id="modalExameOptometrico" class="modal-overlay escondido">
+    <div class="modal modal-grande">
+      <div class="modal-header">
+        <h3>👁️ Ficha de Exames Optométricos</h3>
+        <button type="button" class="modal-fechar" onclick="fecharModalExame()">✕</button>
+      </div>
+
+      <form id="formExameOptometrico">
+        <input type="hidden" id="examePacienteId" />
+
+        <h4 style="color:#0369a1;">1. Anamnese</h4>
+        <label>
+          Histórico e Queixas
+          <textarea id="exameAnamnese" rows="2" placeholder="Queixas visuais, histórico clínico..."></textarea>
+        </label>
+
+        <h4 style="color:#0369a1; margin-top:15px;">2. Acuidade Visual</h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <label>OD (Longe) <input type="text" id="exameAcuidadeODLonge" placeholder="20/20"></label>
+          <label>OS (Longe) <input type="text" id="exameAcuidadeOSLonge" placeholder="20/20"></label>
+          <label>OD (Perto) <input type="text" id="exameAcuidadeODPerto" placeholder="J1"></label>
+          <label>OS (Perto) <input type="text" id="exameAcuidadeOSPerto" placeholder="J1"></label>
+        </div>
+
+        <h4 style="color:#0369a1; margin-top:15px;">3. Autorrefrator / Refração</h4>
+        <label>
+          Resultados do Autorrefrator e Refração
+          <textarea id="exameAutorrefrator" rows="2" placeholder="Ex: OD -2.50 / OE -2.75..."></textarea>
+        </label>
+        <label>
+          Refração Final
+          <textarea id="exameRefracao" rows="2" placeholder="Ex: OD -2.25 CIL -0.50 EIXO 180..."></textarea>
+        </label>
+
+        <h4 style="color:#0369a1; margin-top:15px;">4. Motilidade e Visão de Cores</h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <label>
+            Motilidade Ocular
+            <select id="exameMotilidade">
+              <option value="Normal">Normal</option>
+              <option value="Estrabismo">Estrabismo</option>
+              <option value="Alterada">Alterada</option>
+            </select>
+          </label>
+          <label>
+            Teste de Cores (Ishihara)
+            <select id="exameVisaoCores">
+              <option value="Normal">Normal</option>
+              <option value="Alterado">Alterado (Suspeita de Daltonismo)</option>
+            </select>
+          </label>
+        </div>
+
+        <h4 style="color:#0369a1; margin-top:15px;">5. Fundo de Olho (Triagem)</h4>
+        <label>
+          Observações do Fundo de Olho
+          <select id="exameFundoOlho">
+            <option value="Normal">Normal (Reflexo presente)</option>
+            <option value="Alterado">Alterado (Encaminhar Oftalmologista)</option>
+          </select>
+        </label>
+
+        <div id="exameErro" class="form-erro"></div>
+
+        <div class="modal-acoes">
+          <button type="button" onclick="fecharModalExame()" class="btn-secundario">Cancelar</button>
+          <button type="submit" class="btn-primario">💾 Salvar Exame</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="mascaras.js"></script>
   <script src="api.js"></script>
   <script src="pacientes.js"></script>
 </body>
+
 </html>

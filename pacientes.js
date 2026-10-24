@@ -235,8 +235,8 @@ async function abrirProntuario(pacienteId) {
       html += '</div>';
     }
 
-        // Botão para abrir o Exame
-        html += `
+    // Botão para abrir o Exame
+    html += `
           <div class="secao-titulo">
             <h4>👁️ Exames Optométricos</h4>
             <button onclick="abrirModalExame(${pacienteId})">➕ Novo Exame</button>
@@ -281,53 +281,54 @@ async function abrirProntuario(pacienteId) {
     }
 
     // 🆕 Receitas
-let receitas = [];
-try {
-  receitas = await API.listarReceitasPaciente(pacienteId);
-} catch (err) {
-  console.error("Erro ao buscar receitas:", err);
-}
+    let receitas = [];
+    try {
+      receitas = await API.listarReceitasPaciente(pacienteId);
+    } catch (err) {
+      console.error("Erro ao buscar receitas:", err);
+    }
 
-html += `
+    html += `
   <div class="secao-titulo">
     <h4>💊 Receitas (${receitas.length})</h4>
     <button onclick="abrirModalReceita(${pacienteId})">➕ Nova receita</button>
   </div>
 `;
 
-if (receitas.length === 0) {
-  html += '<p class="vazio">Nenhuma receita emitida ainda.</p>';
-} else {
-  html += '<div class="lista-receitas">';
-  receitas.forEach(r => {
-    html += `
-      <div class="receita-item">
-        <div class="cabecalho">
-          <strong>💊 ${r.tipo === "lentes" ? "Lentes de contato" : "Óculos"}</strong>
-          <span class="data">${formatarDataHora(r.criadoEm)}</span>
-        </div>
-        <div class="graus">
-          <span>👁️ OD: <strong>${formatarGrau(r.od_esf_longe)}</strong> ${r.od_cil_longe ? `CIL ${formatarGrau(r.od_cil_longe)}` : ""} ${r.od_eixo_longe ? `EIXO ${r.od_eixo_longe}°` : ""}</span>
-          <span>👁️ OE: <strong>${formatarGrau(r.oe_esf_longe)}</strong> ${r.oe_cil_longe ? `CIL ${formatarGrau(r.oe_cil_longe)}` : ""} ${r.oe_eixo_longe ? `EIXO ${r.oe_eixo_longe}°` : ""}</span>
-          ${r.adicao ? `<span>📖 Adição: <strong>+${r.adicao.toFixed(2)}</strong></span>` : ""}
-        </div>
-        <div class="rodape">
-          <span>${r.profissionalNome || "—"}</span>
-          <div class="acoes-receita">
-            <button onclick="imprimirReceita(${r.id})" title="Imprimir">🖨️</button>
-            <button onclick="removerReceita(${pacienteId}, ${r.id})" title="Remover">🗑️</button>
-          </div>
-        </div>
+    if (receitas.length === 0) {
+      html += '<p class="vazio">Nenhuma receita emitida ainda.</p>';
+    } else {
+      html += '<div class="lista-receitas">';
+      receitas.forEach(r => {
+        html += `
+  <div class="receita-item">
+    <div class="cabecalho">
+      <strong>💊 ${r.tipo === "lentes" ? "Lentes de contato" : "Óculos"}</strong>
+      <span class="data">${formatarDataHora(r.criadoEm)}</span>
+    </div>
+    <div class="graus">
+      <span>👁️ OD: <strong>${formatarGrau(r.od_esf_longe)}</strong> ${r.od_cil_longe ? `CIL ${formatarGrau(r.od_cil_longe)}` : ""} ${r.od_eixo_longe ? `EIXO ${r.od_eixo_longe}°` : ""} ${r.od_prisma ? `<strong style="color:red">PRISMA ${r.od_prisma}</strong>` : ""}</span>
+      <span>👁️ OE: <strong>${formatarGrau(r.oe_esf_longe)}</strong> ${r.oe_cil_longe ? `CIL ${formatarGrau(r.oe_cil_longe)}` : ""} ${r.oe_eixo_longe ? `EIXO ${r.oe_eixo_longe}°` : ""} ${r.oe_prisma ? `<strong style="color:red">PRISMA ${r.oe_prisma}</strong>` : ""}</span>
+      ${r.adicao ? `<span>📖 Adição: <strong>+${r.adicao.toFixed(2)}</strong></span>` : ""}
+    </div>
+    <div class="rodape">
+      <span>${r.profissionalNome || "—"}</span>
+      <div class="acoes-receita">
+        <button onclick="imprimirReceita(${r.id})" title="Imprimir">🖨️</button>
+        <button onclick="removerReceita(${pacienteId}, ${r.id})" title="Remover">🗑️</button>
       </div>
-    `;
-  });
-  html += '</div>';
-}
+    </div>
+  </div>
+
+        `;
+      });
+      html += '</div>';
+    }
 
     conteudoProntuario.innerHTML = html;
   } catch (err) {
     console.error(err);
-    conteudoProntuario.innerHTML = `<p class="vazio">❌ Erro: ${err.message}</p>`;
+    conteudoProntuario.innerHTML = `< p class="vazio" >❌ Erro: ${ err.message }</p > `;
   }
 }
 
@@ -507,6 +508,8 @@ function abrirModalReceita(pacienteId, receita = null) {
     document.getElementById("oeDp").value = receita.oe_dp ?? "";
     document.getElementById("recAdicao").value = receita.adicao ?? "";
     document.getElementById("recObservacoes").value = receita.observacoes ?? "";
+    document.getElementById("odPrisma").value = receita.od_prisma ?? "";
+    document.getElementById("oePrisma").value = receita.oe_prisma ?? "";
   } else {
     formReceita.reset();
     document.getElementById("recPacienteId").value = pacienteId;
@@ -585,6 +588,9 @@ formReceita.addEventListener("submit", async (e) => {
     oe_eixo_longe: isNaN(oeEixo) ? null : oeEixo,
     oe_dp: isNaN(oeDp) ? null : oeDp,
 
+    od_prisma: document.getElementById("odPrisma").value.trim() || null,
+    oe_prisma: document.getElementById("oePrisma").value.trim() || null,
+
     adicao: isNaN(adicao) ? null : adicao,
 
     od_esf_perto: odEsfPerto,
@@ -646,68 +652,68 @@ async function imprimirReceita(receitaId) {
     };
 
     const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Receita - ${paciente.nome}</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; max-width: 700px; margin: 0 auto; }
-          h1 { text-align: center; color: #0369a1; margin-bottom: 4px; }
-          .subtitulo { text-align: center; color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
-          .paciente { background: #f0f9ff; padding: 16px; border-radius: 10px; margin-bottom: 24px; }
-          .paciente strong { color: #0f172a; }
-          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          th { background: #0ea5e9; color: white; padding: 10px; text-align: left; }
-          td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; }
-          .grau { font-family: monospace; font-size: 1.05rem; font-weight: 700; color: #0f172a; }
-          .adicao-box { background: #fef3c7; padding: 14px; border-radius: 10px; margin: 20px 0; }
-          .obs { margin-top: 24px; font-size: 0.9rem; color: #475569; }
-          .assinatura { margin-top: 60px; text-align: center; }
-          .linha { border-top: 1px solid #0f172a; width: 300px; margin: 0 auto; }
-          .assinatura p { margin: 6px 0; font-size: 0.85rem; }
-          @media print { body { padding: 20px; } }
-        </style>
-      </head>
-      <body>
-        <h1>👁️ Receita ${r.tipo === "lentes" ? "de Lentes de Contato" : "de Óculos"}</h1>
-        <p class="subtitulo">Emitida em ${new Date(r.criadoEm).toLocaleDateString("pt-BR")}</p>
+          < !DOCTYPE html >
+            <html>
+              <head>
+                <meta charset="UTF-8">
+                  <title>Receita - ${paciente.nome}</title>
+                  <style>
+                    body {font - family: Arial, sans-serif; padding: 40px; max-width: 700px; margin: 0 auto; }
+                    h1 {text - align: center; color: #0369a1; margin-bottom: 4px; }
+                    .subtitulo {text - align: center; color: #64748b; margin-bottom: 30px; font-size: 0.9rem; }
+                    .paciente {background: #f0f9ff; padding: 16px; border-radius: 10px; margin-bottom: 24px; }
+                    .paciente strong {color: #0f172a; }
+                    table {width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    th {background: #0ea5e9; color: white; padding: 10px; text-align: left; }
+                    td {padding: 12px 10px; border-bottom: 1px solid #e2e8f0; }
+                    .grau {font - family: monospace; font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+                    .adicao-box {background: #fef3c7; padding: 14px; border-radius: 10px; margin: 20px 0; }
+                    .obs {margin - top: 24px; font-size: 0.9rem; color: #475569; }
+                    .assinatura {margin - top: 60px; text-align: center; }
+                    .linha {border - top: 1px solid #0f172a; width: 300px; margin: 0 auto; }
+                    .assinatura p {margin: 6px 0; font-size: 0.85rem; }
+                    @media print {body {padding: 20px; } }
+                  </style>
+              </head>
+              <body>
+                <h1>👁️ Receita ${r.tipo === "lentes" ? "de Lentes de Contato" : "de Óculos"}</h1>
+                <p class="subtitulo">Emitida em ${new Date(r.criadoEm).toLocaleDateString("pt-BR")}</p>
 
-        <div class="paciente">
-          <strong>Paciente:</strong> ${paciente.nome}<br>
-          ${paciente.cpf ? `<strong>CPF:</strong> ${paciente.cpf}<br>` : ""}
-          ${paciente.nascimento ? `<strong>Nascimento:</strong> ${formatarData(paciente.nascimento)}<br>` : ""}
-        </div>
+                <div class="paciente">
+                  <strong>Paciente:</strong> ${paciente.nome}<br>
+                    ${paciente.cpf ? `<strong>CPF:</strong> ${paciente.cpf}<br>` : ""}
+                    ${paciente.nascimento ? `<strong>Nascimento:</strong> ${formatarData(paciente.nascimento)}<br>` : ""}
+                </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Olho</th>
-              <th>ESF</th>
-              <th>CIL</th>
-              <th>EIXO</th>
-              ${r.od_dp ? "<th>DP</th>" : ""}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>OD (Direito)</strong></td>
-              <td class="grau">${fmt(r.od_esf_longe)}</td>
-              <td class="grau">${fmt(r.od_cil_longe)}</td>
-              <td class="grau">${r.od_eixo_longe ? r.od_eixo_longe + "°" : "—"}</td>
-              ${r.od_dp ? `<td class="grau">${r.od_dp}mm</td>` : ""}
-            </tr>
-            <tr>
-              <td><strong>OE (Esquerdo)</strong></td>
-              <td class="grau">${fmt(r.oe_esf_longe)}</td>
-              <td class="grau">${fmt(r.oe_cil_longe)}</td>
-              <td class="grau">${r.oe_eixo_longe ? r.oe_eixo_longe + "°" : "—"}</td>
-              ${r.oe_dp ? `<td class="grau">${r.oe_dp}mm</td>` : ""}
-            </tr>
-          </tbody>
-        </table>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Olho</th>
+                      <th>ESF</th>
+                      <th>CIL</th>
+                      <th>EIXO</th>
+                      ${r.od_dp ? "<th>DP</th>" : ""}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>OD (Direito)</strong></td>
+                      <td class="grau">${fmt(r.od_esf_longe)}</td>
+                      <td class="grau">${fmt(r.od_cil_longe)}</td>
+                      <td class="grau">${r.od_eixo_longe ? r.od_eixo_longe + "°" : "—"}</td>
+                      ${r.od_dp ? `<td class="grau">${r.od_dp}mm</td>` : ""}
+                    </tr>
+                    <tr>
+                      <td><strong>OE (Esquerdo)</strong></td>
+                      <td class="grau">${fmt(r.oe_esf_longe)}</td>
+                      <td class="grau">${fmt(r.oe_cil_longe)}</td>
+                      <td class="grau">${r.oe_eixo_longe ? r.oe_eixo_longe + "°" : "—"}</td>
+                      ${r.oe_dp ? `<td class="grau">${r.oe_dp}mm</td>` : ""}
+                    </tr>
+                  </tbody>
+                </table>
 
-        ${r.adicao ? `
+                ${r.adicao ? `
           <div class="adicao-box">
             <strong>📖 Adição (perto):</strong> ${fmt(r.adicao)}<br>
             <strong>👁️ OD perto:</strong> <span class="grau">${fmt(r.od_esf_perto)}</span> &nbsp;|&nbsp;
@@ -715,16 +721,16 @@ async function imprimirReceita(receitaId) {
           </div>
         ` : ""}
 
-        ${r.observacoes ? `<div class="obs"><strong>Observações:</strong> ${r.observacoes}</div>` : ""}
+                ${r.observacoes ? `<div class="obs"><strong>Observações:</strong> ${r.observacoes}</div>` : ""}
 
-        <div class="assinatura">
-          <div class="linha"></div>
-          <p><strong>${r.profissionalNome || "Profissional responsável"}</strong></p>
-          <p>Assinatura e carimbo</p>
-        </div>
-      </body>
-      </html>
-    `;
+                <div class="assinatura">
+                  <div class="linha"></div>
+                  <p><strong>${r.profissionalNome || "Profissional responsável"}</strong></p>
+                  <p>Assinatura e carimbo</p>
+                </div>
+              </body>
+            </html>
+        `;
 
     const janela = window.open("", "_blank");
     janela.document.write(html);
@@ -776,7 +782,7 @@ formExame.addEventListener("submit", async (e) => {
     fecharModalExame();
     carregarExamesOptometricos(dados.pacienteId);
   } catch (err) {
-    erroBox.innerHTML = `<p>❌ ${err.message}</p>`;
+    erroBox.innerHTML = `< p >❌ ${ err.message }</p > `;
     erroBox.classList.add("visivel");
   }
 });
@@ -794,7 +800,7 @@ async function carregarExamesOptometricos(pacienteId) {
     }
 
     container.innerHTML = exames.map(e => `
-      <div class="consulta-pront" style="border-left-color: #0ea5e9;">
+          < div class="consulta-pront" style = "border-left-color: #0ea5e9;" >
         <div class="cabecalho">
           <strong>Exame Optométrico</strong>
           <span class="data">${new Date(e.criadoEm).toLocaleDateString("pt-BR")}</span>
@@ -804,10 +810,10 @@ async function carregarExamesOptometricos(pacienteId) {
           <p><strong>Refração:</strong> ${e.refracao || "-"}</p>
           <p><strong>Fundo de Olho:</strong> ${e.fundo_olho || "-"}</p>
         </div>
-      </div>
-    `).join("");
+      </div >
+          `).join("");
   } catch (err) {
-    container.innerHTML = `<p class="vazio">❌ Erro ao carregar exames.</p>`;
+    container.innerHTML = `< p class="vazio" >❌ Erro ao carregar exames.</p > `;
   }
 }
 

@@ -63,35 +63,20 @@ router.post("/", async (req, res) => {
     const result = await run(
       `INSERT INTO receitas
         (empresaId, pacienteId, consultaId, profissionalId,
-         od_esf_longe, od_cil_longe, od_eixo_longe, od_dp,
-         oe_esf_longe, oe_cil_longe, oe_eixo_longe, oe_dp,
-         adicao,
-         od_esf_perto, od_cil_perto, od_eixo_perto,
+         od_esf_longe, od_cil_longe, od_eixo_longe, od_dp, od_prisma,
+         oe_esf_longe, oe_cil_longe, oe_eixo_longe, oe_dp, oe_prisma,
+         adicao, od_esf_perto, od_cil_perto, od_eixo_perto,
          oe_esf_perto, oe_cil_perto, oe_eixo_perto,
          observacoes, tipo)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        empresaId,
-        r.pacienteId,
-        r.consultaId || null,
-        req.usuario.profissionalId || null,
-        r.od_esf_longe ?? null,
-        r.od_cil_longe ?? null,
-        r.od_eixo_longe ?? null,
-        r.od_dp ?? null,
-        r.oe_esf_longe ?? null,
-        r.oe_cil_longe ?? null,
-        r.oe_eixo_longe ?? null,
-        r.oe_dp ?? null,
+        empresaId, r.pacienteId, r.consultaId || null, req.usuario.profissionalId || null,
+        r.od_esf_longe ?? null, r.od_cil_longe ?? null, r.od_eixo_longe ?? null, r.od_dp ?? null, r.od_prisma || null,
+        r.oe_esf_longe ?? null, r.oe_cil_longe ?? null, r.oe_eixo_longe ?? null, r.oe_dp ?? null, r.oe_prisma || null,
         r.adicao ?? null,
-        r.od_esf_perto ?? null,
-        r.od_cil_perto ?? null,
-        r.od_eixo_perto ?? null,
-        r.oe_esf_perto ?? null,
-        r.oe_cil_perto ?? null,
-        r.oe_eixo_perto ?? null,
-        r.observacoes || null,
-        r.tipo || "oculos"
+        r.od_esf_perto ?? null, r.od_cil_perto ?? null, r.od_eixo_perto ?? null,
+        r.oe_esf_perto ?? null, r.oe_cil_perto ?? null, r.oe_eixo_perto ?? null,
+        r.observacoes || null, r.tipo || "oculos"
       ]
     );
 
@@ -102,7 +87,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ erro: "Erro ao criar receita" });
   }
 });
-
 // ===================================================================
 // ==========  PUT /api/receitas/:id  ================================
 // ===================================================================
@@ -111,41 +95,25 @@ router.put("/:id", async (req, res) => {
     const r = req.body;
     const empresaId = req.usuario.empresaId || 1;
 
-    const existente = await get(
-      "SELECT id FROM receitas WHERE id = ? AND empresaId = ?",
-      [req.params.id, empresaId]
-    );
+    const existente = await get("SELECT id FROM receitas WHERE id = ? AND empresaId = ?", [req.params.id, empresaId]);
     if (!existente) return res.status(404).json({ erro: "Receita não encontrada" });
 
     await run(
       `UPDATE receitas SET
-         od_esf_longe = ?, od_cil_longe = ?, od_eixo_longe = ?, od_dp = ?,
-         oe_esf_longe = ?, oe_cil_longe = ?, oe_eixo_longe = ?, oe_dp = ?,
-         adicao = ?,
-         od_esf_perto = ?, od_cil_perto = ?, od_eixo_perto = ?,
+         od_esf_longe = ?, od_cil_longe = ?, od_eixo_longe = ?, od_dp = ?, od_prisma = ?,
+         oe_esf_longe = ?, oe_cil_longe = ?, oe_eixo_longe = ?, oe_dp = ?, oe_prisma = ?,
+         adicao = ?, od_esf_perto = ?, od_cil_perto = ?, od_eixo_perto = ?,
          oe_esf_perto = ?, oe_cil_perto = ?, oe_eixo_perto = ?,
          observacoes = ?, tipo = ?
        WHERE id = ? AND empresaId = ?`,
       [
-        r.od_esf_longe ?? null,
-        r.od_cil_longe ?? null,
-        r.od_eixo_longe ?? null,
-        r.od_dp ?? null,
-        r.oe_esf_longe ?? null,
-        r.oe_cil_longe ?? null,
-        r.oe_eixo_longe ?? null,
-        r.oe_dp ?? null,
+        r.od_esf_longe ?? null, r.od_cil_longe ?? null, r.od_eixo_longe ?? null, r.od_dp ?? null, r.od_prisma || null,
+        r.oe_esf_longe ?? null, r.oe_cil_longe ?? null, r.oe_eixo_longe ?? null, r.oe_dp ?? null, r.oe_prisma || null,
         r.adicao ?? null,
-        r.od_esf_perto ?? null,
-        r.od_cil_perto ?? null,
-        r.od_eixo_perto ?? null,
-        r.oe_esf_perto ?? null,
-        r.oe_cil_perto ?? null,
-        r.oe_eixo_perto ?? null,
-        r.observacoes || null,
-        r.tipo || "oculos",
-        req.params.id,
-        empresaId
+        r.od_esf_perto ?? null, r.od_cil_perto ?? null, r.od_eixo_perto ?? null,
+        r.oe_esf_perto ?? null, r.oe_cil_perto ?? null, r.oe_eixo_perto ?? null,
+        r.observacoes || null, r.tipo || "oculos",
+        req.params.id, empresaId
       ]
     );
 

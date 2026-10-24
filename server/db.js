@@ -268,6 +268,10 @@ await adicionarColunaSeFaltar("usuarios", "resetToken", "TEXT");
 await adicionarColunaSeFaltar("usuarios", "resetTokenExpira", "TEXT");
 await adicionarColunaSeFaltar("empresas", "modulos", "TEXT");
 
+// ===== Migrações: Prismas na receita =====
+await adicionarColunaSeFaltar("receitas", "od_prisma", "TEXT");
+await adicionarColunaSeFaltar("receitas", "oe_prisma", "TEXT");
+
     // ---- 6. Seed inicial de profissionais ----
     const totalProf = await get("SELECT COUNT(*) as n FROM profissionais");
     if (Number(totalProf.n) === 0) {
