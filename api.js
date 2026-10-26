@@ -87,7 +87,7 @@ const API = {
   alterarAtivoEmpresaSuper: (id, ativo) => apiFetch(`/super/empresas/${id}/ativo`, { method: "PATCH", body: JSON.stringify({ ativo }) }),
   atualizarEmpresaSuper: (id, dados) => apiFetch(`/super/empresas/${id}`, { method: "PUT", body: JSON.stringify(dados) }),
   alterarPlanoEmpresa: (id, dados) => apiFetch(`/super/empresas/${id}/plano`, { method: "PATCH", body: JSON.stringify(dados) }),
-  gerarPagamento: (id, dados) => apiFetch(`/super/empresas/${id}/assinar`, { method: "POST", body: JSON.stringify(dados) }),
+  gerarPagamento: (id, dados) => apiFetch(`/pagamentos/empresas/${id}/assinar`, { method: "POST", body: JSON.stringify(dados) }),
 
   // ===== Pacientes =====
   listarPacientes: (busca = "") => apiFetch("/pacientes" + (busca ? `?q=${encodeURIComponent(busca)}` : "")),

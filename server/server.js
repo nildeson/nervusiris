@@ -59,6 +59,8 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
 // ===== Servir arquivos estáticos (logos) =====
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -173,6 +175,10 @@ app.get("/api/empresas/por-dominio", async (req, res) => {
 
 const salasRouter = require("./routes/salas");
 app.use("/api/salas", salasRouter);
+
+// server/server.js — logo depois da linha do salasRouter
+const pagamentosRouter = require("./routes/pagamentos");
+app.use("/api/pagamentos", pagamentosRouter); // auth fica DENTRO do router (webhook é público)
 
 // ===================================================================
 // ===========  ROTAS PROTEGIDAS (AUTENTICAÇÃO + TRIAL)  =============
