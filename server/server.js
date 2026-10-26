@@ -122,8 +122,8 @@ app.use("/api/super", superRouter);
 const agendaRouter = require("./routes/agenda");
 app.use("/api/agenda", agendaRouter);
 
-const examesRouter = require("./routes/exames");
-app.use("/api/exames", verificarTrial, examesRouter); // Adicione o verificarTrial se quiser
+//const examesRouter = require("./routes/exames");
+//app.use("/api/exames", verificarTrial, examesRouter); // Adicione o verificarTrial se quiser
 
 // ===================================================================
 // =====  GET /api/status-trial (SEM trial — sempre acessível)  ======
