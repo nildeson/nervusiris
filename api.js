@@ -144,6 +144,9 @@ const API = {
     body: JSON.stringify(dados)
   }),
 
+  gerarPagamento: (id, dados) => apiFetch('/super/empresas/' + id + '/assinar', 
+    { method: 'POST', body: JSON.stringify(dados) }),
+
   // ===== Pacientes =====
   listarPacientes: (busca = "") =>
     apiFetch("/pacientes" + (busca ? `?q=${encodeURIComponent(busca)}` : "")),

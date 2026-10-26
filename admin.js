@@ -435,6 +435,27 @@ async function carregarConfig() {
   }
 }
 
+document.getElementById("btnAssinarPlano")?.addEventListener("click", async () => {
+  try {
+    const btn = document.getElementById("btnAssinarPlano");
+    btn.textContent = "Gerando pagamento...";
+    btn.disabled = true;
+
+    // Pega o ID da empresa logada (que está no localStorage)
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const empresaId = usuario.empresaId;
+
+    const resp = await API.gerarPagamento(empresaId, { valor: 199.90, plano: "basico" });
+    
+    // Redireciona o cliente para o Mercado Pago
+    window.location.href = resp.init_point;
+  } catch (err) {
+    alert("Erro ao gerar pagamento: " + err.message);
+    btn.textContent = "Assinar Plano Básico";
+    btn.disabled = false;
+  }
+});
+
 // ===== Salva configurações =====
 formConfig.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -578,6 +599,8 @@ btnRemoverLogo.addEventListener("click", async () => {
     alert("❌ Erro: " + err.message);
   }
 });
+
+
 
 // Chama ao carregar
 carregarLogoAtual();

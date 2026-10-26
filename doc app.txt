@@ -1,0 +1,21 @@
+
+---
+
+## 📌 Resumo do que fizemos hoje:
+1. ✅ Corrigimos bugs no `app.js` (Salas duplicadas e logo no localhost).
+2. ✅ Implementamos as **Salas Dinâmicas** (banco de dados, API e tela de admin).
+3. ✅ Implementamos o **Painel Financeiro Básico** no Super Admin (Valor da mensalidade, dia de vencimento e status).
+4. ✅ Fizemos o `git push` de tudo.
+
+---
+
+## 🎯 O que faremos na semana que vem (Parte 3):
+Quando você voltar, a sua missão será a **Integração com o Mercado Pago** (ou Stripe).
+Isso envolverá:
+1. Criar a conta de desenvolvedor.
+2. Configurar as chaves de API no `.env`.
+3. Criar rotas no backend para gerar o link de pagamento (Checkout).
+4. Configurar o *Webhook* para que, quando o cliente pagar, o sistema mude o status dele para `Pago` automaticamente.
+
+**Bom final de semana e bom descanso!** 🌙
+Na semana que vem, é só mandar "bom dia" que a gente retoma essa reta final. 🚀

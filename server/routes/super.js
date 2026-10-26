@@ -10,7 +10,48 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const { all, get, run } = require("../db");
 const { autenticar, exigirSuper } = require("../middleware/auth");
+const { MercadoPagoConfig, Preference } = require("mercadopago");
 
+// ===================================================================
+// =====  POST /api/super/webhook  (ROTA PÚBLICA)  ===================
+// ===================================================================
+router.post("/webhook", async (req, res) => {
+  try {
+    const { type, data } = req.body;
+
+    // O Mercado Pago manda vários tipos de eventos. Só queremos o de pagamento.
+    if (type === "payment" && data?.id) {
+      const paymentId = data.id;
+      
+      // Buscamos os detalhes do pagamento na API do Mercado Pago
+      const resp = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+        headers: {
+          Authorization: `Bearer ${process.env.MERCADOPAGO_ACCESS_TOKEN}`
+        }
+      });
+      
+      const pagamento = await resp.json();
+
+      // Se o pagamento foi APROVADO
+      if (pagamento.status === "approved") {
+        const empresaId = pagamento.external_reference;
+        
+        if (empresaId) {
+          // Atualiza o plano da empresa e marca como Pago
+          await run(
+            "UPDATE empresas SET plano = 'basico', statusPagamento = 'pago' WHERE id = ?",
+            [empresaId]
+          );
+          console.log(`✅ Pagamento aprovado! Empresa ${empresaId} agora é Plano Básico.`);
+        }
+      }
+    }
+    res.status(200).send("OK");
+  } catch (err) {
+    console.error("💥 Erro no Webhook do Mercado Pago:", err);
+    res.status(200).send("OK"); 
+  }
+});
 // Todas as rotas exigem login + papel super
 router.use(autenticar, exigirSuper);
 
